@@ -1,4 +1,4 @@
-import { createIcon } from "./CustomIcons";
+import { createIcon } from "./CustomIcon";
 
 
 export default function StatCard(stat: Stat) {
