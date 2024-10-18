@@ -186,14 +186,12 @@ custom-icon {
   width: 100%;
 }
 
-.stat-card {
+.card {
   border: 2px solid var(--color-surface-border);
   padding: 20px;
   width: 150px;
   text-align: center;
   border-radius: 8px;
-
-
 }
 
 .hidden {
