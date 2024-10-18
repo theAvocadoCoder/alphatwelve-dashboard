@@ -1,0 +1,201 @@
+
+/***********************************
+* Variables & Default Dark mode
+*/
+
+:root {
+  --color-background: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-surface-container: #F8FAFC;
+  --color-surface-dim: #F1F5F9;
+  --color-surface-border: #F2F2F7;
+  --color-heading: #000000;
+  --color-body: #334155;
+  --color-body-select: #8576FF;
+  --color-select-container: #FCF7FF;
+  --color-table-control-container: #FFFFFF;
+  --color-table-control-border: #E2E8F0;
+  --color-pagination-control: #64748B;
+  --color-pagination-control-disabled: #334155;
+  --color-pagination-control-container: #FFFFFF;
+  --color-pagination-control-container-disabled: #E2E8F0;
+  --color-pagination-control-border: #E2E8F0;
+  --color-icon: #334155;
+  --color-icon-container: #FFFFFF;
+  --color-icon-container-variant: #FFFFFF;
+  --color-icon-border: #E2E8F0;
+  --color-primary: #8576FF;
+  --color-info: #3B82F6;
+  --color-info-container: #DBEAFE;
+  --color-info-border: transparent;
+  --color-success: #10B981;
+  --color-success-container: #D1FAE5;
+  --color-success-border: transparent;
+  --color-warning: #F43F5E;
+
+  --logo: url("./alphatwelve-dark.svg");
+}
+
+.dark {
+  --color-background: #383544;
+  --color-surface: #484554;
+  --color-surface-container: #ADA9BB;
+  --color-surface-dim: #6A6676;
+  --color-surface-border: transparent;
+  --color-heading: #FFFFFF;
+  --color-body: #FFFFFF;
+  --color-body-select: #FCF7FF;
+  --color-table-control-container: #484554;
+  --color-table-control-border: #484554;
+  --color-select-container: #8576FF;
+  --color-pagination-control: #8576FF;
+  --color-pagination-control-disabled: #8576FF99;
+  --color-pagination-control-container: #484554;
+  --color-pagination-control-container-disabled: #48455499;
+  --color-pagination-control-border: transparent;
+  --color-icon: #484554;
+  --color-icon-container: #ADA9BB;
+  --color-icon-container-variant: #FFFFFF;
+  --color-icon-border: transparent;
+  --color-primary: #8576FF;
+  --color-info: #77B1FF;
+  --color-info-container: transparent;
+  --color-info-border: #77B1FF;
+  --color-success: #65DDB5;
+  --color-success-container: transparent;
+  --color-success-border: #65DDB5;
+  --color-warning: #F43F5E;
+
+  --logo: url("./alphatwelve-light.svg");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #FFFFFF;
+    --color-surface: #FFFFFF;
+    --color-surface-container: #F8FAFC;
+    --color-surface-dim: #F1F5F9;
+    --color-surface-border: #F2F2F7;
+    --color-heading: #000000;
+    --color-body: #334155;
+    --color-body-select: #8576FF;
+    --color-select-container: #FCF7FF;
+    --color-table-control-container: #FFFFFF;
+    --color-table-control-border: #E2E8F0;
+    --color-pagination-control: #64748B;
+    --color-pagination-control-disabled: #334155;
+    --color-pagination-control-container: #FFFFFF;
+    --color-pagination-control-container-disabled: #E2E8F0;
+    --color-pagination-control-border: #E2E8F0;
+    --color-icon: #334155;
+    --color-icon-container: #FFFFFF;
+    --color-icon-container-variant: #FFFFFF;
+    --color-icon-border: #E2E8F0;
+    --color-primary: #8576FF;
+    --color-info: #3B82F6;
+    --color-info-container: #DBEAFE;
+    --color-info-border: transparent;
+    --color-success: #10B981;
+    --color-success-container: #D1FAE5;
+    --color-success-border: transparent;
+    --color-warning: #F43F5E;
+  }
+}
+
+/******************************************
+* END: Variables & Default Dark mode
+*
+*/
+
+/********************************************
+* General Styles
+*/
+
+body {
+  display: flex;
+  background-color: var(--color-background);
+  color: var(--color-body);
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: min(25dvw, 30rem);
+  background-color: var(--color-background);
+  color: var(--color-body);
+  border-right: 2px solid var(--color-surface-border);
+  padding: 20px;
+  height: 100vh;
+}
+
+div#logo {
+  background-image: var(--logo);
+  background-size: contain;
+  background-position: top;
+  background-repeat: no-repeat;
+  width: 70%;
+  padding: 0.5rem;
+  aspect-ratio: 522/220;
+  cursor: pointer;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  color: var(--color-body);
+  text-decoration: none;
+}
+
+button {
+  color: var(--color-body);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+iconify-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+custom-icon {
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+}
+
+.content {
+  padding: 20px;
+  width: 100%;
+}
+
+.stat-card {
+  border: 2px solid var(--color-surface-border);
+  padding: 20px;
+  width: 150px;
+  text-align: center;
+  border-radius: 8px;
+
+
+}
+
+.hidden {
+  display: none;
+}

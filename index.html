@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/alphatwelve-a.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AlphaTwelve Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- TODO: Replace placeholder HTML content -->
+    <div class="sidebar">
+      <a href="#">
+        <div id="logo">
+          <span role="img" aria-label="AlphaTwelve logo"></span>
+        </div>
+      </a>
+      <ul>
+        <li><a href="#dashboard">
+          <iconify-icon icon="mdi:home" noobserver></iconify-icon>
+          <span>Dashboard</span>
+        </a></li>
+        <li><a href="#reports">
+          <iconify-icon icon="mdi:document" noobserver></iconify-icon>
+          <span>Reports</span>
+        </a></li>
+        <li><a href="#settings">
+          <iconify-icon icon="mdi:settings" noobserver></iconify-icon>
+          <span>Settings</span>
+        </a></li>
+        <li>
+          <button id="toggle-sidebar">
+            <iconify-icon icon="mdi:chevron-double-left"></iconify-icon>
+            <span>Collapse</span>
+          </button>
+        </li>
+        <li>
+          <button id="darkmode-toggle">
+            <span role="checkbox"></span>
+            <span>Dark mode</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="content">
+      <h1>Welcome, here's your summary</h1>
+        
+      <section id="dashboard">
+        <div class="stats">
+          <div class="card">Total events: 100,000</div>
+          <div class="card">Active speakers: 25</div>
+        </div>
+        <h2>Events Registrations per month</h2>
+        <div class="chart">
+          <div class="card">Chart</div>
+          <div class="card">Carousel</div>
+        </div>
+        <h2>Events History</h2>
+        <div class="history">
+          <div class="card">History...</div>
+        </div>
+      </section>
+      <section id="in-progress" class="hidden">
+        <h3>Work in progress</h3>
+        <p>This page is still being built. Please check back soon.</p>
+      </section>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
