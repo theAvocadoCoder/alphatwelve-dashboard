@@ -1,0 +1,86 @@
+.stat-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  padding: 1rem;
+  flex: 1;
+  text-align: center;
+  border-radius: 2px;
+
+  /* Stat label and value */
+  &>* {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 2rem;
+  }
+
+  /* Stat label */
+  & h3 {
+    position: relative;
+    width: fit-content;
+
+    /* Stat tooltip icon */
+    & custom-icon {
+      line-height: 0;
+      width: 1rem;
+      height: 1rem;
+      cursor: default;
+    }
+
+    /* Stat label tooltip */
+    & .tooltip {
+      visibility: hidden;
+      width: 200px;
+      font-size: 0.75rem;
+      line-height: 1.25em;
+      text-align: left !important;
+      background-color: var(--color-body);
+      opacity: 0.95;
+      color: var(--color-background);
+      text-align: center;
+      padding: 0.45rem;
+      border-radius: 6px;
+      
+      left: 105%;
+      top: -5px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    &>custom-icon:hover + .tooltip {
+      visibility: visible;
+    }
+  }
+
+  /* Stat value */
+  & p {    
+    /* Stat rate */
+    & span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+      line-height: 1rem;
+  
+      &.positive-rate {
+        color: var(--color-success);
+      }
+      
+      &.negative-rate {
+        color: var(--color-warning);
+    
+        & custom-icon {
+          transform: rotate(90deg);
+        }
+      }
+  
+      & custom-icon {
+        width: 0.75rem;
+        height: 0.75rem;
+      }
+    }
+  }
+
+}
