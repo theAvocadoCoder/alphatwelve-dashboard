@@ -1,4 +1,4 @@
-import { createIcon } from "./CustomIcon";
+import { createIcon } from "../CustomIcon";
 import styles from "./StatCard.module.css";
 
 
