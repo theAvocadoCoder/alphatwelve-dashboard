@@ -3,6 +3,9 @@
 * Variables & Default Dark mode
 */
 
+/* Inter Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 :root {
   --color-background: #FFFFFF;
   --color-surface: #FFFFFF;
@@ -71,34 +74,36 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #FFFFFF;
-    --color-surface: #FFFFFF;
-    --color-surface-container: #F8FAFC;
-    --color-surface-dim: #F1F5F9;
-    --color-surface-border: #F2F2F7;
-    --color-heading: #000000;
-    --color-body: #334155;
-    --color-body-select: #8576FF;
-    --color-select-container: #FCF7FF;
-    --color-table-control-container: #FFFFFF;
-    --color-table-control-border: #E2E8F0;
-    --color-pagination-control: #64748B;
-    --color-pagination-control-disabled: #334155;
-    --color-pagination-control-container: #FFFFFF;
-    --color-pagination-control-container-disabled: #E2E8F0;
-    --color-pagination-control-border: #E2E8F0;
-    --color-icon: #334155;
-    --color-icon-container: #FFFFFF;
+    --color-background: #383544;
+    --color-surface: #484554;
+    --color-surface-container: #ADA9BB;
+    --color-surface-dim: #6A6676;
+    --color-surface-border: transparent;
+    --color-heading: #FFFFFF;
+    --color-body: #FFFFFF;
+    --color-body-select: #FCF7FF;
+    --color-table-control-container: #484554;
+    --color-table-control-border: #484554;
+    --color-select-container: #8576FF;
+    --color-pagination-control: #8576FF;
+    --color-pagination-control-disabled: #8576FF99;
+    --color-pagination-control-container: #484554;
+    --color-pagination-control-container-disabled: #48455499;
+    --color-pagination-control-border: transparent;
+    --color-icon: #484554;
+    --color-icon-container: #ADA9BB;
     --color-icon-container-variant: #FFFFFF;
-    --color-icon-border: #E2E8F0;
+    --color-icon-border: transparent;
     --color-primary: #8576FF;
-    --color-info: #3B82F6;
-    --color-info-container: #DBEAFE;
-    --color-info-border: transparent;
-    --color-success: #10B981;
-    --color-success-container: #D1FAE5;
-    --color-success-border: transparent;
+    --color-info: #77B1FF;
+    --color-info-container: transparent;
+    --color-info-border: #77B1FF;
+    --color-success: #65DDB5;
+    --color-success-container: transparent;
+    --color-success-border: #65DDB5;
     --color-warning: #F43F5E;
+  
+    --logo: url("./alphatwelve-light.svg");
   }
 }
 
@@ -115,6 +120,10 @@ body {
   display: flex;
   background-color: var(--color-background);
   color: var(--color-body);
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
 }
 
 
@@ -186,12 +195,98 @@ custom-icon {
   width: 100%;
 }
 
-.card {
-  border: 2px solid var(--color-surface-border);
-  padding: 20px;
-  width: 150px;
+.stats {
+  width: 67.25rem;
+  gap: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  padding: 1rem;
+  flex: 1;
   text-align: center;
-  border-radius: 8px;
+  border-radius: 2px;
+
+  /* Stat label and value */
+  &>* {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 2rem;
+  }
+
+  /* Stat label */
+  & h3 {
+    position: relative;
+    width: fit-content;
+
+    /* Stat tooltip icon */
+    & custom-icon {
+      line-height: 0;
+      width: 1rem;
+      height: 1rem;
+      cursor: default;
+    }
+
+    /* Stat label tooltip */
+    & .tooltip {
+      visibility: hidden;
+      width: 200px;
+      font-size: 0.75rem;
+      line-height: 1.25em;
+      text-align: left !important;
+      background-color: var(--color-body);
+      opacity: 0.95;
+      color: var(--color-background);
+      text-align: center;
+      padding: 0.45rem;
+      border-radius: 6px;
+      
+      left: 105%;
+      top: -5px;
+      position: absolute;
+      z-index: 1;
+    }
+
+    &>custom-icon:hover + .tooltip {
+      visibility: visible;
+    }
+  }
+
+  /* Stat value */
+  & p {    
+    /* Stat rate */
+    & span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+      line-height: 1rem;
+  
+      &.positive-rate {
+        color: var(--color-success);
+      }
+      
+      &.negative-rate {
+        color: var(--color-warning);
+    
+        & custom-icon {
+          transform: rotate(90deg);
+        }
+      }
+  
+      & custom-icon {
+        width: 0.75rem;
+        height: 0.75rem;
+      }
+    }
+  }
+
 }
 
 .hidden {
