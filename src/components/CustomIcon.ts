@@ -10,12 +10,13 @@ class CustomIcon extends HTMLElement {
     const shadow = this.attachShadow({ mode: 'open' });
 
     const content = this.getAttribute("data-content")?.split(","); // data-content is an array of path definitions
+    const scale = this.getAttribute("data-scale") || "14";
 
-    // Create the svg
+    // Create the SVG
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("width", "100%");
     svg.setAttribute("height", "100%");
-    svg.setAttribute("viewBox", `0 0 14 14`);
+    svg.setAttribute("viewBox", `0 0 ${scale} ${scale}`);
     svg.setAttribute("fill", "none");
 
     const length = content!.length;
