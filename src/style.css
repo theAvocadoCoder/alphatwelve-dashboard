@@ -37,7 +37,7 @@
   --color-success-border: transparent;
   --color-warning: #F43F5E;
 
-  --logo: url("./alphatwelve-dark.svg");
+  --logo: url("./assets/alphatwelve-dark.svg");
 }
 
 .dark {
@@ -70,7 +70,7 @@
   --color-success-border: #65DDB5;
   --color-warning: #F43F5E;
 
-  --logo: url("./alphatwelve-light.svg");
+  --logo: url("./assets/alphatwelve-light.svg");
 }
 
 @media (prefers-color-scheme: dark) {
@@ -104,7 +104,7 @@
     --color-success-border: #65DDB5;
     --color-warning: #F43F5E;
   
-    --logo: url("./alphatwelve-light.svg");
+    --logo: url("./assets/alphatwelve-light.svg");
   }
 }
 
@@ -136,7 +136,6 @@ body {
   width: 100%;
   overflow-y: scroll;
 }
-
 
 * {
   margin: 0;

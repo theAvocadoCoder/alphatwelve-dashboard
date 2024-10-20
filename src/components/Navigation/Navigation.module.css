@@ -476,8 +476,8 @@ nav li > * {
     padding-block: 1.5rem;
 
     /* Use square logo */
-    & .logo { background-image: url("./alphatwelve-a.svg"); }
-    
+    & .logo { background-image: url("../../assets/alphatwelve-a.svg"); }
+
     & :has(>.logo) {
       justify-content: center;
       padding: 0.25rem 0 1cqh;
