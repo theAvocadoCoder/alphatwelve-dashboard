@@ -61,11 +61,11 @@ export default function Navigation() {
 
   // The darkmode toggle
   const darkmodeToggle = document.createElement("li");
-  // darkmodeToggle.classList.add(styles["nav-text"])
+  // darkmodeToggle.classList.add()
   darkmodeToggle.innerHTML = `
     <button id="darkmode-toggle">
       <span role="checkbox" class="${styles["darkmode-toggle"]}"></span>
-      <span>Dark mode</span>
+      <span class="${styles["nav-text"]}">Dark mode</span>
     </button>
   `;
   darkmodeToggle.addEventListener("click", () => {
@@ -161,7 +161,7 @@ function createNavLinks(type: "primary" | "secondary") {
       }" class="${
         window.location.pathname === `/${route.link}` ||
         (isHome && window.location.pathname === "/") ? styles.active : ""
-      }${styles[route.link]}">
+      } ${styles[route.link]}">
         ${icon}
         <span class="${styles["nav-text"]}">${route.text}</span>
       </a>

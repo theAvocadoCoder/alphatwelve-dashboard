@@ -246,7 +246,7 @@ nav li > * {
     background-color: var(--color-primary);
 
     &::after {
-      margin-inline: 0px .5rem;
+      margin-inline: .5rem 0px;
     }
   }
 }
@@ -266,7 +266,7 @@ nav li > * {
     border-radius: 50%;
     width: 0.75rem;
     height: 0.75rem;
-    margin-inline: .5rem 0px;
+    margin-inline: 0px .5rem;
     background-color: white;
     transition: margin-inline 0.5s ease;
   }
@@ -302,9 +302,10 @@ nav li > * {
   }
 
   /* Hover state */
-  & > *:hover {
+  &:is(a):not(.active):not(.active *) > *:hover {
     background-color: var(--color-surface-container);
     color: var(--color-body);
+    border-radius: .125rem;
 
     & > :last-child { color: var(--color-body) }
   }
@@ -318,48 +319,172 @@ nav li > * {
 
 /* Large Screens */
 
-@media screen and (min-width: 768px) {
-  /* 
+@media screen and (min-width: 900px) {
+  /* Display collapse btn and sec. nav, hide menu btn */
+  .collapse-button { display: grid !important }
+  .secondary-nav { display: flex }
+  .menu-button { display: none }
 
-  .expanded, .expanded * {
-    all: initial;
-  }
-
-
-  .collapse-button { display: none }
-
+  /* The main navigation container */
   .navigation {
-    position: static;
-    width: min(25dvw, 30rem);
-    background-color: var(--color-background);
-    color: var(--color-body);
+    position: sticky;
+    width: clamp(20rem, 25dvw, 30rem);
     border-right: 0.125rem solid var(--color-surface-border);
     padding: 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 100vh;
     transition: width 0.5s ease;
 
-    & ul { list-style: none; }
-    & li { display: contents; }
-
+    /* Display nav text when fully open */
     & .nav-text {
       opacity: 1;
       transition: opacity 0.3s ease;
     }
   }
 
+  /* The container for the pri. and sec. navs, control buttons and user profile */
+  nav {
+    position: static;
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: transparent;
+    border: none;
+    
+    & > * {
+      flex-direction: column;
+      height: fit-content;
+    }
+  }
+
+  /* The user profile */
+  .user-profile {
+    height: fit-content;
+    align-items: start !important;
+
+    /* Show large version */
+    & > .profile-large {
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      grid-template-rows: 1fr;
+      font-size: .75rem;
+      width: fit-content;
+      padding: 0.5rem;
+      gap: 1rem;
+
+      /* Text block */
+      & > div {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+      }
+
+      & span:last-child { opacity: .7 }
+    }
+
+    /* Hide small version */
+    & > .profile-small {
+      display: none;
+    }
+  }
+
+  /* The logo element */
+  .logo {
+    background-image: var(--logo);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 70%;
+    padding: 1rem 0.5rem;
+    aspect-ratio: 524/220;
+    cursor: pointer;
+  }
+  
+  /* The logo container */
+  :has(>.logo) {
+    justify-content: start;
+    width: 100%;
+  }
+  
+  /* the nav links */
+  nav li > * {
+    grid-template-rows: 1fr;
+    grid-template-columns: 1.5rem 1fr;
+    color: var(--color-nav-icon);
+    gap: 1rem;
+    height: fit-content;
+    margin: 0.25rem 0;
+    font-size: 1rem;
+    line-height: 1.25rem;
+
+    /* Hover effect; only apply to navlinks */
+    &:is(a):not(.active):not(.active *):hover {
+      background-color: var(--color-surface-container);
+      color: var(--color-body);
+  
+      & > :last-child { color: var(--color-body) }
+    }
+  
+    /* Center the icon */
+    &>:first-child {
+      justify-self: center;
+    }
+  
+    /* Set different color for the text */
+    &>:last-child {
+      color: var(--color-body);
+      justify-self: start;
+    }
+  
+    & custom-icon {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* Remove border from active state */
+  .active {
+    &:is(a) {
+      border: none;
+    }
+  }
+
+  /* Style the notification badge */
+  .notifications {
+    position: relative;
+
+    &::after {
+      content: "3";
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      right: .5rem;
+      background-color: var(--color-warning);
+      color: white;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+    }
+  }
+
+  /* When the menu is collapsed */
   .collapsed {
     width: 4.5rem;
     padding-block: 1.5rem;
 
+    /* Use square logo */
     & .logo { background-image: url("./alphatwelve-a.svg"); }
     
     & :has(>.logo) {
       justify-content: center;
+      padding: 0.25rem 0 1cqh;
       width: 2.5rem;
       height: auto;
       aspect-ratio: 1/1;
     }
 
+    /* Hide text */
     & .nav-text { 
       opacity: 0;
       width: 0px;
@@ -368,6 +493,7 @@ nav li > * {
       pointer-events: none !important;
     }
 
+    /* Different styling for nav links */
     & li > * {
       color: var(--color-body) !important;
       grid-template-columns: 1fr 0px !important;
@@ -381,75 +507,39 @@ nav li > * {
       }
     }
 
+    /* Rotate collapse btn icon */
     & .collapse-button iconify-icon {
       transform: rotate(180deg);
     }
-  }
 
-  .logo {
-    background-image: var(--logo);
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 70%;
-    padding: 0.5rem;
-    margin-bottom: 0.75rem;
-    aspect-ratio: 524/220;
-    cursor: pointer;
-  }
-  
-  :has(>.logo) {
-    display: flex;
-    justify-content: start;
-    width: 100%;
-  }
-  
-  .navigation li > * {
-    color: var(--color-nav-icon);
-    text-decoration: none;
-    display: grid;
-    grid-template-columns: 1.5rem 1fr;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.5rem;
-    margin: 0.25rem 0;
-    width: 100%;
-    font-size: 1rem;
-    line-height: 1.25rem;
-    font-weight: 400;
+    /* Hide darkmode toggle */
+    & li:has(.darkmode-toggle) { display: none; }
 
-    &:is(a):hover {
-      background-color: var(--color-surface-container);
-      color: var(--color-body);
+    /* Hide user profile text */
+    & .user-profile .profile-large {
+      display: flex;
+      justify-content: center;
+
+      & > div {
+        display: none;
+      }
     }
+
+    /* Style notification badge smaller when menu is collapsed */
+    & .notifications {
+      position: relative;
   
-    &>:first-child {
-      justify-self: center;
-    }
-  
-    &>:last-child {
-      color: var(--color-body);
-      justify-self: start;
-    }
-  
-    & custom-icon {
-      font-size: 0.75rem;
+      &::after {
+        content: "";
+        position: absolute;
+        right: .25rem;
+        top: .25rem;
+        background-color: var(--color-warning);
+        color: white;
+        width: .5rem;
+        height: .5rem;
+        border-radius: 50%;
+      }
     }
   }
-
-  .active {
-    &:is(a) {
-      background-color: var(--color-select-container);
-      border-radius: 0.125rem;
-    }
-  
-    &:is(a) > * {
-      color: var(--color-body-select) !important;
-    }
-  
-    &:has( .darkmode-toggle) .darkmode-toggle {
-      justify-content: end;
-      background-color: var(--color-primary);
-    }
-  } */
 }
