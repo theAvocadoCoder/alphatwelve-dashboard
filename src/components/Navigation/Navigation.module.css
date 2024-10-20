@@ -362,6 +362,7 @@ nav li > * {
     background-color: transparent;
     border: none;
     overflow-x: hidden;
+    overflow-y: auto;
     
     & > * {
       flex-direction: column;
