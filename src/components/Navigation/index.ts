@@ -161,7 +161,7 @@ function createNavLinks(type: "primary" | "secondary") {
       }" class="${
         window.location.pathname === `/${route.link}` ||
         (isHome && window.location.pathname === "/") ? styles.active : ""
-      } ${styles[route.link]}">
+      } ${styles[route.link] || ""}">
         ${icon}
         <span class="${styles["nav-text"]}">${route.text}</span>
       </a>

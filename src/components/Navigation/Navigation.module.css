@@ -13,7 +13,7 @@
   align-items: start;
   padding: 1rem;
   z-index: 3;
-  background-color: var(--color-background);
+  background-color: var(--color-surface);
   border-bottom: 0.125rem solid var(--color-surface-border);
   transition: height 0.5s ease;
 
@@ -51,6 +51,8 @@
     display: block;
     padding-right: 2rem;
     overflow-y: auto;
+    background-color: var(--color-surface);
+    border: none;
 
     /* Display nav items, control buttons, and user profile in a list */
     & > * {
@@ -103,7 +105,14 @@
   }
 
   /* For nav links */
-  & .active { border: none }
+  & .active { 
+    border: none;
+    background-color: var(--color-select-container);
+
+    &:is(a) > * {
+      color: var(--color-body-select) !important;
+    }
+  }
 
   /* The user profile */
   .user-profile {
@@ -186,10 +195,10 @@ nav {
   left: 0;
   width: 100dvw;
   height: 4.5rem;
-  overflow: hidden;
+  overflow: auto hidden;
   display: flex;
   background-color: var(--color-background);
-  border-top: 0.125rem solid var(--color-surface-border);
+  border-top: 0.125rem solid var(--color-nav-icon);
 
   /* uls that contain the navlinks; li's have display set to content */
   & > * {
@@ -233,13 +242,12 @@ nav li > * {
 /* Active state for navlinks and toggle button */
 .active {
   &:is(a) {
-    background-color: var(--color-select-container);
     border-radius: 0.125rem;
     border-top: 0.25rem solid var(--color-primary);
   }
 
   &:is(a) > * {
-    color: var(--color-body-select) !important;
+    color: var(--color-primary) !important;
   }
 
   &:has( .darkmode-toggle) .darkmode-toggle {
@@ -353,6 +361,7 @@ nav li > * {
     display: block;
     background-color: transparent;
     border: none;
+    overflow-x: hidden;
     
     & > * {
       flex-direction: column;
@@ -444,10 +453,16 @@ nav li > * {
     }
   }
 
-  /* Remove border from active state */
+  /* Remove border from active state, set largescreen active state colors */
   .active {
+    background-color: var(--color-select-container);
+    
     &:is(a) {
       border: none;
+      
+      &> * {
+        color: var(--color-body-select) !important;
+      }
     }
   }
 
