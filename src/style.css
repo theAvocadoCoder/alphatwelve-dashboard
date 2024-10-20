@@ -163,6 +163,23 @@
   }
 }
 
+h1 {
+  font-size: 1.0625rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+
+h2 {
+  font-size: 1.0625rem;
+  line-height: 0.75rem;
+  font-weight: medium;
+}
+
+@media (min-width: 768px) {
+  h1 { font-size: 1.375rem; }
+  h2 { font-size: 1.125rem; }
+}
+
 button {
   color: var(--color-body);
   background-color: transparent;
