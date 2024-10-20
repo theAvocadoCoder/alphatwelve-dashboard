@@ -8,23 +8,24 @@
   /* Stat label and value */
   &>* {
     display: flex;
-    align-items: start;
+    align-items: center;
     gap: 0.25rem;
     font-size: 1.25rem;
-    font-weight: 600;
     line-height: 2rem;
+    font-weight: 600;
   }
 
   /* Stat label */
   &> p:first-child {
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    color: var(--color-body-variant);
     position: relative;
     width: fit-content;
 
     /* Stat tooltip icon */
     & custom-icon {
-      position: relative;
-      top: .5rem;
-      right: 0;
       line-height: 0;
       width: 1rem;
       height: 1rem;
@@ -58,14 +59,15 @@
 
   /* Stat value */
   &> p:last-child {  
-    align-items: center;  
+    gap: 0.5rem;
+    
     /* Stat rate */
     & span {
       display: inline-flex;
       align-items: center;
-      gap: 0.25rem;
-      font-size: 0.75rem;
-      line-height: 1rem;
+      gap: 0.5rem;
+      font-size: 0.625rem;
+      line-height: 0.75rem;
   
       &.positive-rate {
         color: var(--color-success);
@@ -80,8 +82,7 @@
       }
   
       & custom-icon {
-        width: 0.75rem;
-        height: 0.75rem;
+        font-size: 0.4375rem;
       }
     }
   }

@@ -14,6 +14,7 @@
   --color-surface-border: #F2F2F7;
   --color-heading: #000000;
   --color-body: #334155;
+  --color-body-variant: #64748B;
   --color-nav-icon: #ADA9BB;
   --color-body-select: #8576FF;
   --color-select-container: #FCF7FF;
@@ -48,6 +49,7 @@
   --color-surface-border: transparent;
   --color-heading: #FFFFFF;
   --color-body: #FFFFFF;
+  --color-body-variant: #F5EBFF;
   --color-body-select: #FCF7FF;
   --color-table-control-container: #484554;
   --color-table-control-border: #484554;
