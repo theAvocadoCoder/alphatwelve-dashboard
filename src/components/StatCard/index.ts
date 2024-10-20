@@ -9,11 +9,11 @@ export default function StatCard(stat: Stat) {
   card.classList.add(styles["stat-card"]);
 
   card.innerHTML = `
-    <h3>
+    <p>
       ${stat.label}
       ${infoIcon}
       <span class="${styles.tooltip}">More information about ${stat.label}...</span>
-    </h3>
+    </p>
     <p>
       ${stat.value}
       <span class="${stat.rate[0] === "+" ? styles["positive-rate"] : styles["negative-rate"]}">
