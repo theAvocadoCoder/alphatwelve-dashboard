@@ -328,6 +328,7 @@ nav li > * {
   /* The main navigation container */
   .navigation {
     position: sticky;
+    background-color: var(--color-surface);
     width: clamp(20rem, 25dvw, 30rem);
     border-right: 0.125rem solid var(--color-surface-border);
     padding: 1rem 0.5rem;
@@ -395,9 +396,8 @@ nav li > * {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    width: 70%;
-    padding: 1rem 0.5rem;
-    aspect-ratio: 524/220;
+    width: min(50%, 15rem);
+    aspect-ratio: 1023/438;
     cursor: pointer;
   }
   
@@ -405,6 +405,8 @@ nav li > * {
   :has(>.logo) {
     justify-content: start;
     width: 100%;
+    height: 3rem;
+    margin-block: 1rem;
   }
   
   /* the nav links */
