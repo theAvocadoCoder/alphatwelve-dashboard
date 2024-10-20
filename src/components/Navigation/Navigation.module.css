@@ -417,6 +417,7 @@ nav li > * {
     width: 100%;
     height: 3rem;
     margin-block: 1rem;
+    padding-inline: 1rem;
   }
   
   /* the nav links */
