@@ -2,12 +2,21 @@ import "./style.css";
 import "iconify-icon";
 
 import StatCard, {Stat} from "./components/StatCard";
-import data from "./mock-data.json";
+import Navigation from "./components/Navigation";
+import { stats as statsData } from "./mock-data.json";
 
 const stats = document.getElementById("stats");
 
-const length = data.stats.length;
+const length = statsData.length;
 
 for (let i = 0; i < length; i++) {
-  stats?.appendChild(StatCard((data.stats[i] as Stat)));
+  stats?.appendChild(StatCard((statsData[i] as Stat)));
 }
+
+document.body.prepend(Navigation());
+
+// @ts-expect-error
+document.body.addEventListener("nav", function(event: CustomEvent) {
+  // console.log(event);
+  // console.log("does this run at all")
+})

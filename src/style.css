@@ -14,6 +14,7 @@
   --color-surface-border: #F2F2F7;
   --color-heading: #000000;
   --color-body: #334155;
+  --color-nav-icon: #ADA9BB;
   --color-body-select: #8576FF;
   --color-select-container: #FCF7FF;
   --color-table-control-container: #FFFFFF;
@@ -117,13 +118,23 @@
 */
 
 body {
+  position: relative;
   display: flex;
+  min-height: 100dvh;
   background-color: var(--color-background);
   color: var(--color-body);
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.menu-open {
+  position: fixed;
+  width: 100%;
+  overflow-y: scroll;
 }
 
 
@@ -131,44 +142,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-.sidebar {
-  width: min(25dvw, 30rem);
-  background-color: var(--color-background);
-  color: var(--color-body);
-  border-right: 2px solid var(--color-surface-border);
-  padding: 20px;
-  height: 100vh;
-}
-
-div#logo {
-  background-image: var(--logo);
-  background-size: contain;
-  background-position: top;
-  background-repeat: no-repeat;
-  width: 70%;
-  padding: 0.5rem;
-  aspect-ratio: 522/220;
-  cursor: pointer;
-}
-
-.sidebar h2 {
-  margin-bottom: 20px;
-}
-
-.sidebar ul {
-  list-style: none;
-}
-
-.sidebar ul li {
-  margin: 10px 0;
-}
-
-.sidebar ul li a {
-  color: var(--color-body);
-  text-decoration: none;
+  transition: color 0.05s linear, background-color 0.5s ease;
 }
 
 button {
@@ -180,18 +154,19 @@ button {
 
 iconify-icon {
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  font-size: 1.5em;
+  color: currentColor;
 }
 
 custom-icon {
   display: inline-block;
-  width: 2em;
-  height: 2em;
+  width: 1.5em;
+  height: 1.5em;
 }
 
 .content {
-  padding: 20px;
+  overflow-x: hidden;
+  padding: 4rem 0.75rem 5rem;
   width: 100%;
 }
 
