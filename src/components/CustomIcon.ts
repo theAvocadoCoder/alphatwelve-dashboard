@@ -6,10 +6,14 @@ class CustomIcon extends HTMLElement {
     super();
   }
 
+  private shadowRootInstance: ShadowRoot | null = null;
+
   // Create the element when it gets connected to the DOM
   connectedCallback() {
 
-    const shadow = this.attachShadow({ mode: 'open' });
+    if (this.shadowRootInstance) return;
+
+    this.shadowRootInstance = this.attachShadow({ mode: 'open' });
 
     const content = this.getAttribute("data-content")?.split(","); // data-content is an array of path definitions
     const scale = this.getAttribute("data-scale") || "14";
@@ -35,7 +39,7 @@ class CustomIcon extends HTMLElement {
       svg.appendChild(path);
     }
 
-    shadow.appendChild(svg);
+    this.shadowRootInstance.appendChild(svg);
   }
 }
 

@@ -111,12 +111,11 @@ export default function Navigation() {
       // Get new route
       const targetId = link!.getAttribute('href')!.substring(1);
 
-      // Create event for navigation
-      const navEvent = new CustomEvent("nav", {
+      const navEvent = new Event("popstate", {
         bubbles: true,
-        detail: { route: targetId }
       });
-      history.pushState({ page: targetId }, targetId, `/${targetId}`);
+
+      history.pushState({ page: targetId || "home" }, targetId || "home", `/${targetId}`);
       link.dispatchEvent(navEvent);
 
       // Set active link
@@ -128,6 +127,18 @@ export default function Navigation() {
       // Close menu if it is open
       if (container.classList.contains(styles.expanded)) toggleMenu();
     });
+  });
+
+  // @ts-expect-error
+  window.addEventListener("nav", function (event: CustomEvent) {
+    console.log("nav event was heard");
+
+    links.forEach(link => {
+      link.classList.toggle(
+        styles.active,
+        link.getAttribute('href') === event.detail && link.id != "logo"
+      )
+    })
   });
 
 

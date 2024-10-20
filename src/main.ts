@@ -9,16 +9,24 @@ import InProgress from "./pages/InProgress";
 const app = document.getElementById("app");
 app!.append(layout());
 
-const length = statsData.length;
+// On page load, append the correct page to the main content element
+const content = app!.querySelector("#content");
+content!.append(
+  window.location.pathname.substring(1) === "" ?
+  Dashboard() :
+  InProgress()
+);
 
-for (let i = 0; i < length; i++) {
-  stats?.appendChild(StatCard((statsData[i] as Stat)));
-}
+// On page navigation, append the correct page to the main content element
+window.addEventListener("popstate", function(event: PopStateEvent) {
+  const target = (event.target! as HTMLAnchorElement).attributes["href" as any].value;
+  if (target.substring(1) === "") {
+    content?.replaceChildren(Dashboard());
+  } else {
+    content?.replaceChildren(InProgress());
+  }
 
-document.body.prepend(Navigation());
-
-// @ts-expect-error
-document.body.addEventListener("nav", function(event: CustomEvent) {
-  // console.log(event);
-  // console.log("does this run at all")
+  // Dispatch custom event to handle page navigation from non-navlink
+  const navEvent = new CustomEvent("nav", { detail: target });
+  window.dispatchEvent(navEvent);
 })
