@@ -73,41 +73,6 @@
   --logo: url("./assets/alphatwelve-light.svg");
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: #383544;
-    --color-surface: #484554;
-    --color-surface-container: #ADA9BB;
-    --color-surface-dim: #6A6676;
-    --color-surface-border: transparent;
-    --color-heading: #FFFFFF;
-    --color-body: #FFFFFF;
-    --color-body-select: #FCF7FF;
-    --color-table-control-container: #484554;
-    --color-table-control-border: #484554;
-    --color-select-container: #8576FF;
-    --color-pagination-control: #8576FF;
-    --color-pagination-control-disabled: #8576FF99;
-    --color-pagination-control-container: #484554;
-    --color-pagination-control-container-disabled: #48455499;
-    --color-pagination-control-border: transparent;
-    --color-icon: #484554;
-    --color-icon-container: #ADA9BB;
-    --color-icon-container-variant: #FFFFFF;
-    --color-icon-border: transparent;
-    --color-primary: #8576FF;
-    --color-info: #77B1FF;
-    --color-info-container: transparent;
-    --color-info-border: #77B1FF;
-    --color-success: #65DDB5;
-    --color-success-container: transparent;
-    --color-success-border: #65DDB5;
-    --color-warning: #F43F5E;
-  
-    --logo: url("./assets/alphatwelve-light.svg");
-  }
-}
-
 /******************************************
 * END: Variables & Default Dark mode
 *

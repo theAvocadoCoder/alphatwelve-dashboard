@@ -61,13 +61,17 @@ export default function Navigation() {
 
   // The darkmode toggle
   const darkmodeToggle = document.createElement("li");
-  // darkmodeToggle.classList.add()
   darkmodeToggle.innerHTML = `
     <button id="darkmode-toggle">
       <span role="checkbox" class="${styles["darkmode-toggle"]}"></span>
       <span class="${styles["nav-text"]}">Dark mode</span>
     </button>
   `;
+  if (
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  ) darkmodeToggle.classList.toggle(styles.active, true);
+  
   darkmodeToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark");
     darkmodeToggle.classList.toggle(styles.active);

@@ -5,17 +5,29 @@ import layout from "./layout";
 import Dashboard from "./pages/Dashboard";
 import InProgress from "./pages/InProgress";
 
-// Append the layout to the main app div 
-const app = document.getElementById("app");
-app!.append(layout());
+// Detect user's color scheme preference
+if (
+  window.matchMedia &&
+  window.matchMedia('(prefers-color-scheme: dark)').matches
+) document.body.classList.toggle("dark", true);
 
-// On page load, append the correct page to the main content element
-const content = app!.querySelector("#content");
-content!.append(
-  window.location.pathname.substring(1) === "" ?
-  Dashboard() :
-  InProgress()
-);
+const app = document.getElementById("app");
+let content: HTMLElement;
+
+// Delay appending content to avoid FOUC
+setTimeout(() => {
+  // Append the layout to the main app div 
+  app!.append(layout());
+  
+  // On page load, append the correct page to the main content element
+  content = app!.querySelector("#content")!;
+  content!.append(
+    window.location.pathname.substring(1) === "" ?
+    Dashboard() :
+    InProgress()
+  );
+
+}, 600)
 
 // On page navigation, append the correct page to the main content element
 window.addEventListener("popstate", function(event: PopStateEvent) {
