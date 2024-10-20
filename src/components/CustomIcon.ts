@@ -1,4 +1,4 @@
-import { customIcons as icons } from "../mock-data.json";
+import { customIcons as icons } from "@/mock-data.json";
 
 class CustomIcon extends HTMLElement {
 

@@ -1,7 +1,8 @@
 import styles from "./Navigation.module.css";
-import { createIcon } from "../CustomIcon";
-import userAvatar from "../../assets/user-avatar.svg";
-import { primaryNav as pNavRoutes, secondaryNav as sNavRoutes } from "../../mock-data.json";
+
+import { createIcon } from "@components/CustomIcon";
+import userAvatar from "@assets/user-avatar.svg";
+import { primaryNav as pNavRoutes, secondaryNav as sNavRoutes } from "@/mock-data.json";
 
 const icons = {
   home: createIcon("home").outerHTML,

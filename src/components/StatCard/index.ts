@@ -1,5 +1,5 @@
-import { createIcon } from "../CustomIcon";
 import styles from "./StatCard.module.css";
+import { createIcon } from "@components/CustomIcon";
 
 const [ infoIcon, rateIcon ] = [ createIcon("info").outerHTML, createIcon("rate").outerHTML ];
 

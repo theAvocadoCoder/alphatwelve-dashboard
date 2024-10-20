@@ -1,6 +1,8 @@
 import styles from "./Dashboard.module.css";
-import StatCard,{Stat} from "../../components/StatCard";
-import { stats as statsData } from "../../mock-data.json";
+
+import StatCard,{Stat} from "@components/StatCard";
+
+import { stats as statsData } from "@/mock-data.json";
 
 const sections = [
   {
