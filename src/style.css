@@ -117,10 +117,17 @@
 * General Styles
 */
 
-body {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: color 0.05s linear, background-color 0.5s ease;
+}
+
+#app {
   position: relative;
   display: flex;
-  min-height: 100dvh;
+  height: 100dvh;
   background-color: var(--color-background);
   color: var(--color-body);
   font-family: "Inter", sans-serif;
@@ -128,7 +135,7 @@ body {
   font-weight: 500;
   font-style: normal;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .menu-open {
@@ -137,11 +144,23 @@ body {
   overflow-y: scroll;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  transition: color 0.05s linear, background-color 0.5s ease;
+.hidden {
+  display: none;
+}
+
+.content {
+  overflow-x: hidden;
+  padding: 4rem 1rem 5rem;
+  width: 100%;
+  padding-inline: 1.25rem;
+  padding-block: 4.5rem;
+}
+
+@media (min-width: 900px) {
+  .content {
+    padding-inline: 1.75rem;
+    padding-block: 2.5rem 4.125rem;
+  }
 }
 
 button {
@@ -161,54 +180,4 @@ custom-icon {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
-}
-
-.content {
-  overflow-x: hidden;
-  padding: 4rem 1rem 5rem;
-  width: 100%;
-  padding-inline: 1.25rem;
-  padding-block: 4.5rem;
-}
-
-@media (min-width: 900px) {
-  .content {
-    padding-inline: 1.75rem;
-    padding-block: 2.5rem 4.125rem;
-  }
-}
-
-.stats {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(1, 1fr); /* Full width for mobile */
-  gap: 0.75rem;
-  padding: 1rem;
-}
-
-/* Tablet and above: adjust card width */
-@media (min-width: 768px) {
-  .stats {
-    grid-template-columns: repeat(2, minmax(12.5rem, 1fr)); /* Cards will resize between 12.5rem and full width */
-  }
-}
-
-/* Desktop and above: container adjusts width */
-@media (min-width: 1280px) {
-  .stats {
-    grid-template-columns: repeat(4, minmax(200px, 1fr));
-    max-width: 1200px;
-    margin: 0 auto 0 0; /* Center the container */
-  }
-}
-
-/* Large screens */
-@media (min-width: 1440px) {
-  .stats {
-    max-width: 1400px; /* Adjust container width on larger screens */
-  }
-}
-
-.hidden {
-  display: none;
 }

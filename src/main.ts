@@ -1,11 +1,13 @@
 import "./style.css";
 import "iconify-icon";
 
-import StatCard, {Stat} from "./components/StatCard";
-import Navigation from "./components/Navigation";
-import { stats as statsData } from "./mock-data.json";
+import layout from "./layout";
+import Dashboard from "./pages/Dashboard";
+import InProgress from "./pages/InProgress";
 
-const stats = document.getElementById("stats");
+// Append the layout to the main app div 
+const app = document.getElementById("app");
+app!.append(layout());
 
 const length = statsData.length;
 
