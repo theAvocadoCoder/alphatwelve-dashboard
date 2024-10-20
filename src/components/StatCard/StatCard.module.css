@@ -57,7 +57,8 @@
   }
 
   /* Stat value */
-  &> p:last-child {    
+  &> p:last-child {  
+    align-items: center;  
     /* Stat rate */
     & span {
       display: inline-flex;
