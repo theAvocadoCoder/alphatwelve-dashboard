@@ -136,8 +136,6 @@ export default function Navigation() {
 
   // @ts-expect-error
   window.addEventListener("nav", function (event: CustomEvent) {
-    console.log("nav event was heard");
-
     links.forEach(link => {
       link.classList.toggle(
         styles.active,
