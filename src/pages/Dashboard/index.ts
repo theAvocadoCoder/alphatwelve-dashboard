@@ -1,6 +1,7 @@
 import styles from "./Dashboard.module.css";
 
 import StatCard,{Stat} from "@components/StatCard";
+import Carousel from "@components/Carousel";
 
 import { stats as statsData } from "@/mock-data.json";
 
@@ -13,7 +14,7 @@ const sections = [
   {
     name: "monthly",
     title: "Event registrations per month",
-    content: ["Chart", "Carousel"],
+    content: ["Chart", new Carousel()],
   },
   {
     name: "history",
