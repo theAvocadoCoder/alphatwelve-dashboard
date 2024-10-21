@@ -76,15 +76,15 @@ class Carousel extends HTMLElement {
       control.addEventListener("click", () => {
         if (!["next", "previous"].includes(control.id)) return;
 
-        this.stopSlide.bind(this)();
+        this.stopSlide();
 
         if (control.id === "next") {
-          this.currentCard < 2 && this.nextSlide.bind(this)();
+          this.currentCard < 2 && this.nextSlide();
         } else if (control.id === "previous") {
-          this.currentCard > 0 && this.previousSlide.bind(this)();
+          this.currentCard > 0 && this.previousSlide();
         }
         
-        this.startSlide.bind(this)();
+        this.startSlide();
       })
     ));
 
@@ -108,19 +108,19 @@ class Carousel extends HTMLElement {
   }
 
   // Start interval for automative slide
-  startSlide() {
+  startSlide = () => {
     this.intervalId = setInterval(() => {
       this.nextSlide();
     }, 3000)
   }
 
   // Clear interval for automativ slide
-  stopSlide() {
+  stopSlide = () => {
     if (this.intervalId) clearInterval(this.intervalId);
   }
 
   // Move to the next slide
-  nextSlide() {
+  nextSlide = () => {
     // Get the container's current width
     let currentWidth: string | number = window.getComputedStyle(this.container!).width;
     currentWidth = Number(currentWidth.substring(0, currentWidth.indexOf("p"))); 
@@ -145,7 +145,7 @@ class Carousel extends HTMLElement {
   }
 
   // Move to the previous slide
-  previousSlide() {
+  previousSlide = () => {
     // Get the container's current width
     let currentWidth: string | number = window.getComputedStyle(this.container!).width;
     currentWidth = Number(currentWidth.substring(0, currentWidth.indexOf("p"))); 
