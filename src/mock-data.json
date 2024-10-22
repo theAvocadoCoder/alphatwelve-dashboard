@@ -57,6 +57,12 @@
         "M5.375 4.375L7.125 6L5.375 7.625"
       ],
       "scale": 12
+    },
+    "chevronRightAlt": {
+      "pathDefinitions": [
+        "M3.75 1.25L7.5 5L3.75 8.75"
+      ],
+      "scale": 10
     }
   },
   "primaryNav": [

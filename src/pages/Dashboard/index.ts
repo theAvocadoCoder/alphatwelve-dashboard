@@ -2,6 +2,7 @@ import styles from "./Dashboard.module.css";
 
 import StatCard,{Stat} from "@components/StatCard";
 import Carousel from "@components/Carousel";
+import EventsHistory from "@/components/EventsHistory";
 
 import { stats as statsData } from "@/mock-data.json";
 
@@ -19,7 +20,7 @@ const sections = [
   {
     name: "history",
     title: "Events History",
-    content: ["History..."],
+    content: [new EventsHistory()],
   },
 ]
 
