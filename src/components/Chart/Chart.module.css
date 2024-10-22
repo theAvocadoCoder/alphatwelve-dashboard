@@ -1,0 +1,14 @@
+/* The chart container */
+.chart-container {
+  position: relative;
+  max-width: 32rem;
+  height: 20rem;
+  background-color: var(--color-surface);
+  padding: 0.625rem 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .chart-container {
+    padding: 2.5rem;
+  }
+}
