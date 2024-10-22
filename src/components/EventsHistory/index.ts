@@ -89,22 +89,31 @@ class EventsHistory extends HTMLElement {
       <div class="${styles["modal-heading"]}">
         <p id="event-name"></p>
         <p id="event-date"></p>
+        <iconify-icon icon="solar:close-circle-line-duotone"></iconify-icon>
+        <iconify-icon icon="solar:close-circle-bold"></iconify-icon>
       </div>
       <div class="${styles["modal-body"]}">
         <p id="event-description"></p>
-        <div class="${styles.avatars}">
-        </div>
-        <div id="attendance">
+        <div>
+          <div class="${styles.avatars}">
+          </div>
+          <p id="attendance">
+          </p>
         </div>
       </div>
       <div class="${styles["modal-control"]}">
-        <button class="edit"></button>
+        <button class="edit">Edit</button>
         <div>
-          <button class="delete"></button>
-          <button class="mark-complete"></button>
+          <button class="delete">Delete</button>
+          <button class="mark-complete">Mark as completed</button>
         </div>
       </div>
     `;
+
+    // Close the modal on button click
+    Array.from(this.modal.root.querySelectorAll("iconify-icon")!).forEach(btn => btn.addEventListener("click", () => {
+      this.modal.root.close();
+    }));
 
     // Store the elements for the event name, date and description
     [

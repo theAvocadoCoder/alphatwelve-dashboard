@@ -1,0 +1,187 @@
+/* The event modal */
+.modal {
+  margin-inline: auto;
+  margin-block: auto;
+  background-color: var(--color-surface);
+  color: var(--color-body);
+  border: none;
+  opacity: 0;
+  transform: scaleY(0);
+  transition:
+    opacity 0.5s ease-out,
+    overlay 0.3s ease-out allow-discrete,
+    display 0.3s ease-out allow-discrete;
+
+  :global(.dark) & { color: var(--color-body-select) }
+
+  /* The modal open state */
+  &[open] {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transform: scaleY(1);
+    box-shadow: 0 0 5rem -0.125rem #0000004c;
+    border-radius: 0.125rem;
+  }
+
+  &> * { 
+    width: 100%;
+  }
+}
+
+/*   Before-open state  */
+/* Needs to be after dialog[open] rule to take effect,
+    as the specificity is the same */
+@starting-style {
+  .modal[open] {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+}
+
+/* Transition the :backdrop when the dialog modal is promoted to the top layer */
+.modal::backdrop {
+  background-color: rgb(0 0 0 / 0%);
+  transition:
+    display 0.3s allow-discrete,
+    overlay 0.3s allow-discrete,
+    background-color 0.3s;
+}
+
+.modal[open]::backdrop {
+  background-color: #383544;
+  opacity: 0.6;
+}
+
+/* This starting-style rule cannot be nested inside the above selector
+because the nesting selector cannot represent pseudo-elements. */
+@starting-style {
+  .modal[open]::backdrop {
+    background-color: #000000;
+  }
+}
+
+/* Event name and date */
+.modal-heading {
+  position: relative;
+  padding: 1.5rem 1.5rem 0;
+
+  /* Event name */
+  & p:first-of-type {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+  }
+
+  /* Event date */
+  & p:last-of-type {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 400;
+    color: var(--color-body-variant);
+  }
+
+  /* Close modal icon */
+  iconify-icon {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: var(--color-surface);
+
+    &:nth-of-type(2) { display: none; }
+
+    :global(.dark) & {
+      display: none;
+      color: var(--color-surface-container);
+      &:nth-of-type(2) { display: block}
+    }
+  }
+}
+
+/* Event description and attendance */
+.modal-body {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  
+  &> * { 
+    width: 100%;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Attendance information for the event */
+  &> :last-child {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* The avatars */
+.avatars {
+  display: flex;
+  gap: 0;
+  width: fit-content;
+
+  /* Round the images */
+  & img {
+    border: 0.125rem solid var(--color-background);
+    border-radius: 50%;
+
+    /* Negative margin for overlap effect  */
+    &:not(:first-child) {
+      margin-left: -.75rem;
+    }
+
+    /* Adjust z-index so left elements overlap right (default display places
+    later elements in the DOM above earlier ones) */
+    &:nth-child(2) { z-index: 1 }
+    &:nth-child(1) { z-index: 2 }
+  }
+}
+
+/* The modal controls */
+.modal-control {
+  background-color: var(--color-surface-container);
+  padding: 1.5rem;
+
+  &, &> * {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* The control buttons */
+  & button {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.125rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  &> button:nth-of-type(1) { background-color: white; color: #334155; border: 0.0625rem solid #E2E8F0 }
+  &> *> button:nth-of-type(1) { background-color: var(--color-warning); color: white; }
+  &> *> button:nth-of-type(2) { background-color: var(--color-primary); color: white; }
+}
+
+@media (min-width: 900px) {
+  .modal-control {
+    &, &> * {
+      flex-direction: row;
+
+      .modal-control & { justify-content: end;}
+    }
+
+    & button {
+      width: fit-content;
+    }
+  }
+}
