@@ -1,6 +1,7 @@
 
 carousel-slider:has( .carousel) {
   & * { overflow-y: hidden;}
+  width: fit-content;
 }
 
 /* The carousel container */
@@ -106,5 +107,12 @@ carousel-slider:has( .carousel) {
     transition: opacity 0.3s ease;
 
     &.active { opacity: 1 }
+  }
+}
+
+@media (min-width: 768px) {
+  carousel-slider:has( .carousel) {
+    & * { overflow-y: hidden;}
+    width: 100%
   }
 }

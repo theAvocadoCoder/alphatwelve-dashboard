@@ -40,7 +40,8 @@ export default function Dashboard() {
 
     section.classList.add(styles[currentSection.name] || currentSection.name);
     section.innerHTML = `${currentSection.title ? `<h2>${currentSection.title}</h2>` : ""}`;
-    section.append(...currentSection.content);
+    section.innerHTML += `<div class="${styles["section-content"]}"></div>`;
+    section.querySelector(`.${styles["section-content"]}`)!.append(...currentSection.content);
 
     sectionList.push(section);
   }

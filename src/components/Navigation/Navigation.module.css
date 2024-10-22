@@ -327,7 +327,7 @@ nav li > * {
 
 /* Large Screens */
 
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 1024px) {
   /* Display collapse btn and sec. nav, hide menu btn */
   .collapse-button { display: grid !important }
   .secondary-nav { display: flex }

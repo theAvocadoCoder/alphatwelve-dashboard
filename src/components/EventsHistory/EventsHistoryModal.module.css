@@ -172,7 +172,7 @@ because the nesting selector cannot represent pseudo-elements. */
   &> *> button:nth-of-type(2) { background-color: var(--color-primary); color: white; }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .modal-control {
     &, &> * {
       flex-direction: row;
