@@ -5,6 +5,7 @@ import Carousel from "@components/Carousel";
 import EventsHistory from "@/components/EventsHistory";
 
 import { stats as statsData } from "@/mock-data.json";
+import Chart from "@/components/Chart";
 
 const sections = [
   {
@@ -15,7 +16,7 @@ const sections = [
   {
     name: "monthly",
     title: "Event registrations per month",
-    content: ["Chart", new Carousel()],
+    content: [new Chart, new Carousel()],
   },
   {
     name: "history",
