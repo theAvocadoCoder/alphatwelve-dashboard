@@ -114,7 +114,7 @@ class EventsHistory extends HTMLElement {
     this.pageNavBtns.forEach(btn => btn.addEventListener("click", () => this.navigatePageByOne(btn)))
 
     // Select the option that corresponds with the current limit
-    this.pagination.querySelector(`option[value="${this.limit}"]`)?.setAttribute("selected", "")
+    this.pagination.querySelector(`option[value="${this.limit}"]`)?.setAttribute("selected", "");
 
     // Listen for change in select element
     this.pagination.querySelector(`.${styles.limit}`)!.addEventListener("change", (event) => {
@@ -124,7 +124,7 @@ class EventsHistory extends HTMLElement {
       this.updatePages();
       this.togglePageNavDisabled();
       this.renderTable();
-    })
+    });
 
     // Create the popup modal
     this.modal.root.innerHTML = `
@@ -153,7 +153,7 @@ class EventsHistory extends HTMLElement {
     `;
 
     // Close the modal on button click
-    Array.from(this.modal.root.querySelectorAll("iconify-icon")!).forEach(btn => btn.addEventListener("click", () => {
+    Array.from(this.modal.root.querySelectorAll("iconify-icon, button")!).forEach(btn => btn.addEventListener("click", () => {
       this.modal.root.close();
     }));
 
@@ -264,7 +264,11 @@ class EventsHistory extends HTMLElement {
 
   // When limit changes, numbe rof pages also changes
   updatePages = () => {
-    this.pages = this.listLength % this.limit > 0 ? Math.ceil(this.listLength / this.limit) : this.listLength /this.limit;
+    this.pages = this.listLength % this.limit > 0 ? 
+      Math.ceil(this.listLength / this.limit) : 
+      this.listLength /this.limit;
+
+    if (this.currentPage > this.pages) this.currentPage = this.pages;
     this.renderPageNumbers();
   }
 
