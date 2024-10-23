@@ -1,0 +1,192 @@
+/* The pagination container */
+.pagination {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 1rem;
+
+}
+
+/* The container for page navigation buttons and page numbers */
+.page-controls {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: fit-content;
+}
+
+/* The page navigation buttons */
+.page-left, .page-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 2.25rem;
+  height: 2.25rem;
+  cursor: pointer;
+  border: 0.0625rem solid #E2E8F0;
+  border-radius: 0.125rem;
+  color: var(--color-pagination-control);
+  background-color: var(--color-surface);
+
+  /* Dark theme */
+  :global(.dark) & {
+    border: none;
+  }
+
+  /* Disabled style */
+  &.disabled {
+    border: none;
+    &:not(:global(.dark) &) { background-color: #E2E8F0 }
+
+    :global(.dark) & {
+      opacity: 0.6
+    }
+  }
+}
+
+/* The container for the page numbers */
+.pages {
+  display: flex;
+  gap: 1rem;
+  padding: .5rem;
+}
+
+/* The page numbers */
+.page-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  color: var(--color-body);
+  cursor: pointer;
+  font-size: 0.875rem;
+
+  /* Active state style */
+  &.active {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+}
+
+/* The container for the custom select element */
+.limit {
+  padding-left: 1.5rem;
+}
+
+/* The custom select element */
+.select {
+  position: relative;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  /* Announcement div for screen readers */
+  #announcement {
+    opacity: 0;
+  }
+
+  /* Select label */
+  label {
+    display: block;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
+
+  /* Select button */
+  button{
+    display: flex;
+    background-color: var(--color-surface);
+    justify-content: space-between;
+    align-items: center;
+    width: 6rem;
+    padding: .5rem;
+    margin-left: 0.5rem;
+    font-size: 0.875rem;
+    text-align: center;
+    position: relative;
+    border: 0.0625rem solid var(--color-surface-dim);
+
+    & .icon {
+      transform: rotate(0);
+      transition: transform 0.3s ease;
+    }
+
+    /* Rotate the icon when dropdown is open */
+    &:has(+ .active) .icon {
+      transform: rotate(180deg);
+    }
+
+    :global(.dark) & {
+      border: none;
+    }
+
+    &:focus-visible {
+      outline: 0;
+      border: 0.125rem solid var(--color-body);
+    }
+  }
+
+  /* The select dropdown */
+  ul {
+    background-color: var(--color-surface);
+    color: var(--color-body-variant);
+    position: absolute;
+    left: 0;
+    right: .5rem;
+    bottom: calc(100% + .5rem);
+    overflow-y: auto;
+    list-style-type: none;
+    padding: 0.5rem;
+    opacity: 0;
+    transform: scale(1,0);
+    transform-origin: bottom right;
+    transition: all .3s ease-in-out;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    pointer-events: none;
+    z-index: 2;
+
+    /* Active state */
+    &.active {
+      opacity: 1;
+      transform: scale(1,1);
+      box-shadow: 0 0 .75rem -0.25rem rgba(0, 0, 0, 0.2);
+      pointer-events: auto;
+
+      :global(.dark) & { box-shadow: 0 0 1rem .0625rem rgba(0, 0, 0, 0.3); }
+    }
+
+    /* The select options */
+    li {
+      padding: .6rem .5rem;
+      cursor: pointer;
+      transition: all .3s ease-in;
+      position: relative;
+
+      &:not(:last-child) {
+        border-bottom: 0.125rem solid var(--color-surface-dim);
+      }
+
+      &:hover, &.current {
+        background-color: var(--color-surface-dim);
+      }
+
+      &.active {
+        background-color: var(--color-primary);
+        color: white;
+      }
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .page-number {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}

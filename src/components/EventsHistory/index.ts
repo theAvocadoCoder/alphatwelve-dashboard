@@ -6,8 +6,14 @@ import avatar2 from "@assets/avatar2.png";
 import avatar3 from "@assets/avatar3.png";
 
 import { createIcon } from "@components/CustomIcon";
+import CustomSelect from "./CustomSelect";
 
-const [chevronRightAlt] = [createIcon("chevronRightAlt").outerHTML];
+const [chevronRightAlt, chevronLeft, chevronRight, chevronDown] = [
+  createIcon("chevronRightAlt").outerHTML,
+  createIcon("chevronLeft").outerHTML,
+  createIcon("chevronRight").outerHTML,
+  createIcon("chevronDown").outerHTML,
+];
 
 class EventsHistory extends HTMLElement {
   constructor() {
@@ -16,11 +22,17 @@ class EventsHistory extends HTMLElement {
 
   // Table data
   body: HTMLTableSectionElement | null = null;
+
+  // Pagination elements
+  pagination: HTMLDivElement = document.createElement("div");
+  pageNavBtns: NodeListOf<HTMLSpanElement> | null = null;
+
   list: typeof history[number][] = [...history];
   currentPage = 1;
   limit = 10;
   listLength = this.list.length;
-  pages = Math.ceil(this.listLength / this.limit);
+  // If list length is a multiple of limit, no need to force rounding up
+  pages = this.listLength % this.limit > 0 ? Math.ceil(this.listLength / this.limit) : this.listLength /this.limit;
 
   // Modal data
   modal: {
@@ -61,6 +73,7 @@ class EventsHistory extends HTMLElement {
 
     this.body = table.getElementsByTagName("tbody")[0];
 
+    // Render the table
     this.renderTable();
 
     // Listen for the button click to open the row dropdown
@@ -82,6 +95,56 @@ class EventsHistory extends HTMLElement {
         const index = Number(row.id[row.id.length - 1]) + (this.limit * (this.currentPage - 1));
         this.openModal(this.list[index]);
       })
+    })
+
+    // Create the pagination section
+    this.pagination.classList.add(styles.pagination);
+    this.pagination.innerHTML = `
+      <div class="${styles["page-controls"]}">
+        <span class="${styles["page-left"]} ${this.currentPage === 1 ? styles.disabled : ""}">
+          ${chevronLeft}
+        </span>
+        <div class="${styles.pages}"></div>
+        <span class="${styles["page-right"]} ${this.currentPage === this.pages ? styles.disabled : ""}">
+          ${chevronRight}
+        </span>
+      </div>
+      <div class="${styles.limit}">
+      </div>
+    `;
+
+    // Add the custom select element
+    this.pagination.querySelector(`.${styles.limit}`)!.appendChild(new CustomSelect({
+      label: "Show:",
+      icon: chevronDown,
+      options: [
+        { value: "10", text: "10 rows" },
+        { value: "20", text: "20 rows" },
+        { value: "30", text: "30 rows" },
+        { value: "50", text: "50 rows" },
+      ],
+    }));
+
+    // Render the page numbers
+    this.renderPageNumbers();
+
+    // The previous and next page navigation buttons
+    this.pageNavBtns = this.pagination.querySelectorAll(`.${styles["page-controls"]}> span`);
+
+    // Listen for button click
+    this.pageNavBtns.forEach(btn => btn.addEventListener("click", () => this.navigatePageByOne(btn)))
+
+    // Select the option that corresponds with the current limit
+    this.pagination.querySelector(`option[value="${this.limit}"]`)?.setAttribute("selected", "")
+
+    // Listen for change in select element
+    this.pagination.querySelector(`.${styles.limit}`)!.addEventListener("change", (event) => {
+      // Set new limit based on user selection
+      this.limit = Number((event.target as HTMLSelectElement).value);
+
+      this.updatePages();
+      this.togglePageNavDisabled();
+      this.renderTable();
     })
 
     // Create the popup modal
@@ -127,8 +190,8 @@ class EventsHistory extends HTMLElement {
     ]
 
     this.modal.root.classList.add(styles.modal);
-    this.appendChild(this.modal.root);
-    this.appendChild(table);
+
+    this.append(this.modal.root, table, this.pagination);
   }
 
   // Tear down the element when it is removed from the DOM
@@ -166,11 +229,11 @@ class EventsHistory extends HTMLElement {
         </tr>
       `;
     }
+
+    this.pagination.querySelectorAll(`span.${styles["page-number"]}`).forEach(number => {
+      number.classList.toggle(styles.active, Number(number.id.slice(5)) === this.currentPage);
+    })
   }
-
-  nextPage() {}
-
-  previousPage() {}
 
   openModal = (event: typeof this.list[number]) => {
     this.clearModal();
@@ -197,6 +260,93 @@ class EventsHistory extends HTMLElement {
     `;
 
     this.modal.root.showModal();
+  }
+
+  // When limit changes, numbe rof pages also changes
+  updatePages = () => {
+    this.pages = this.listLength % this.limit > 0 ? Math.ceil(this.listLength / this.limit) : this.listLength /this.limit;
+    this.renderPageNumbers();
+  }
+
+  // Render the page numbers that will be displayed
+  renderPageNumbers = () => {
+    const container = this.pagination.querySelector(`.${styles.pages}`);
+    container!.innerHTML = "";
+
+    for (let i = 0; i < this.pages; i++) {
+      // When more than 5 pages, truncate the numbers at depth of 2
+      if (this.pages > 5 && i === 2){  
+        container!.innerHTML += `
+          <span>...</span>
+        `;
+        if (this.currentPage > 2 && this.currentPage < this.pages - 1) {
+          container!.innerHTML += `
+            <span id="page-${this.currentPage}" class="${styles["page-number"]} ${
+              styles.active
+            }">${this.currentPage}</span><span>...</span>
+          `;
+        }
+        i = this.pages - 3;
+        continue;
+      }
+      // Display current page in the midst of truncation
+      container!.innerHTML += `
+        <span id="page-${i+1}" class="${styles["page-number"]} ${
+          this.currentPage === i + 1 ? styles.active : ""
+        }">${i+1}</span>
+      `;
+    }
+
+    // Add click event listeners to change pages
+    container!.querySelectorAll(`.${styles["page-number"]}`).forEach(number => number.addEventListener("click", () => {
+      this.currentPage = Number(number.id.slice(5));
+      this.renderTable();
+      this.togglePageNavDisabled();
+      this.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }));
+  }
+
+  // Disable respective nav buttons when at start or end of pages
+  togglePageNavDisabled = () => {
+
+    if (this.currentPage === 1) {
+      this.pageNavBtns!.forEach(_btn => _btn.classList.toggle(styles.disabled, _btn.classList.contains(styles["page-left"])));
+    } else if (this.currentPage === this.pages) {
+      this.pageNavBtns!.forEach(_btn => _btn.classList.toggle(styles.disabled, _btn.classList.contains(styles["page-right"])));
+    } else { 
+      this.pageNavBtns!.forEach(_btn => _btn.classList.toggle(styles.disabled, false));
+    }
+
+  }
+
+  // Move to next or previous page
+  navigatePageByOne = (btn: HTMLElement) => {
+      
+    if (btn.classList.contains(styles["page-left"])) {
+      if (this.currentPage === 1) return;
+
+      this.currentPage--;
+      this.renderTable();
+
+    } else if (btn.classList.contains(styles["page-right"])) {
+      if (this.currentPage === this.pages) return;
+
+      this.currentPage++;
+      this.renderTable();
+
+    } else { return }
+    
+    this.renderPageNumbers();
+    this.togglePageNavDisabled();
+    
+    this.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
   }
 
   // Clear previous data from the modal

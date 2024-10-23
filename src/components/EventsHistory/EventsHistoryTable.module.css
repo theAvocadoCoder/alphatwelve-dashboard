@@ -94,9 +94,13 @@
 
   /* Cells that don't get hidden */
   & td:first-child:not(.extra *) {
-    display: inline-flex;
+    width: 15rem;
+    display: inline;
     align-items: center;
     gap: 1rem;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; 
   }
 }
 
@@ -210,6 +214,10 @@
         color: var(--color-info);
         &::before { background-color: var(--color-info); }
       }
+    }
+
+    & td:first-child:not(.extra *) {
+      width: 19.5rem;
     }
   }
 

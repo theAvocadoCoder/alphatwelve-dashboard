@@ -46,6 +46,12 @@
       ],
       "scale": 17
     },
+    "chevronDown": {
+      "pathDefinitions": [
+        "M12.7084 8.95831L10.0001 11.875L7.29175 8.95831"
+      ],
+      "scale": 20
+    },
     "chevronLeft": {
       "pathDefinitions": [
         "M6.625 4.375L4.875 6L6.625 7.625"

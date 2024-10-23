@@ -1,3 +1,14 @@
 @import url("./EventsHistoryTable.module.css");
 @import url("./EventsHistoryModal.module.css");
-/* @import url("./EventsHistoryControls.module.css"); */
+@import url("./EventsHistoryControls.module.css");
+
+/* Table is too large for small screens, make scrollabel along x-axis for better access */
+:has(> .table){
+  overflow-x: auto;
+
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-track,
+  &::-webkit-scrollbar-thumb {
+    height: .5rem !important;
+  }
+}
