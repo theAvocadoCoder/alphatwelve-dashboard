@@ -1,3 +1,20 @@
+
+:global(.custom-select) * {
+  &::-webkit-scrollbar { width: .25rem !important; }
+  &::-webkit-scrollbar-track, & *::-webkit-scrollbar-track { background-color: transparent }
+  &::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb {
+    background-color: #b5b0c0;
+    border-radius: .25rem;
+    :global(.dark) & { background-color: #858090;}
+  }
+}
+
+/** 
+ *
+ * START PAGINATION STYLES
+ *
+*/
+
 /* The pagination container */
 .pagination {
   width: 100%;
@@ -74,20 +91,24 @@
 }
 
 /* The container for the custom select element */
-.limit {
-  padding-left: 1.5rem;
-}
+.limit {display: block;}
 
 /* The custom select element */
-.select {
+:global(.custom-select) {
   position: relative;
   display: flex;
   justify-content: end;
   align-items: center;
 
   /* Announcement div for screen readers */
-  #announcement {
+  :global(.announcement) {
     opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
   }
 
   /* Select label */
@@ -131,55 +152,55 @@
       border: 0.125rem solid var(--color-body);
     }
   }
+}
 
-  /* The select dropdown */
-  ul {
-    background-color: var(--color-surface);
-    color: var(--color-body-variant);
-    position: absolute;
-    left: 0;
-    right: .5rem;
-    bottom: calc(100% + .5rem);
-    overflow-y: auto;
-    list-style-type: none;
-    padding: 0.5rem;
-    opacity: 0;
-    transform: scale(1,0);
-    transform-origin: bottom right;
-    transition: all .3s ease-in-out;
-    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-    pointer-events: none;
-    z-index: 2;
+/* The select dropdown */
+:global(.custom-select-options) {
+  background-color: var(--color-surface);
+  color: var(--color-body-variant);
+  position: absolute;
+  left: 0;
+  right: .5rem;
+  bottom: calc(100% + .5rem);
+  overflow-y: auto;
+  list-style-type: none;
+  padding: 0.5rem;
+  opacity: 0;
+  transform: scale(1,0);
+  transform-origin: bottom right;
+  transition: all .3s ease-in-out;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  pointer-events: none;
+  z-index: 2;
 
-    /* Active state */
-    &.active {
-      opacity: 1;
-      transform: scale(1,1);
-      box-shadow: 0 0 .75rem -0.25rem rgba(0, 0, 0, 0.2);
-      pointer-events: auto;
+  /* Active state */
+  &.active {
+    opacity: 1;
+    transform: scale(1,1);
+    box-shadow: 0 0 .75rem -0.25rem rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
 
-      :global(.dark) & { box-shadow: 0 0 1rem .0625rem rgba(0, 0, 0, 0.3); }
+    :global(.dark) & { box-shadow: 0 0 1rem .0625rem rgba(0, 0, 0, 0.3); }
+  }
+
+  /* The select options */
+  li {
+    padding: .6rem .5rem;
+    cursor: pointer;
+    transition: all .3s ease-in;
+    position: relative;
+
+    &:not(:last-child) {
+      border-bottom: 0.125rem solid var(--color-surface-dim);
     }
 
-    /* The select options */
-    li {
-      padding: .6rem .5rem;
-      cursor: pointer;
-      transition: all .3s ease-in;
-      position: relative;
+    &:hover, &.current {
+      background-color: var(--color-surface-dim);
+    }
 
-      &:not(:last-child) {
-        border-bottom: 0.125rem solid var(--color-surface-dim);
-      }
-
-      &:hover, &.current {
-        background-color: var(--color-surface-dim);
-      }
-
-      &.active {
-        background-color: var(--color-primary);
-        color: white;
-      }
+    &.active {
+      background-color: var(--color-primary);
+      color: white;
     }
   }
 }

@@ -118,6 +118,7 @@ class EventsHistory extends HTMLElement {
 
     // Listen for change in select element
     this.pagination.querySelector(`.${styles.limit}`)!.addEventListener("change", (event) => {
+      if ((event as CustomEvent).detail.type !== "Show:") return;
       // Set new limit based on user selection
       this.limit = Number((event.target as HTMLSelectElement).value);
 

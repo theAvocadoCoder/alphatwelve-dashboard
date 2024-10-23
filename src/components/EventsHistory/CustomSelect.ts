@@ -5,26 +5,40 @@ class CustomSelect extends HTMLElement {
   private _icon: InitOptions["icon"];
   private _options: InitOptions["options"];
   private _label: InitOptions["label"];
+  private _labelAsText: InitOptions["labelAsText"];
 
-  selectButton: HTMLButtonElement | null = null;
-  dropDown: HTMLUListElement | null = null;
-  options: NodeListOf<HTMLLIElement> | null = null;
-  announcement: HTMLDivElement | null = null;
-  isDropdownOpen = false;
-  currentOptionIndex = 0;
+  private selectButton: HTMLButtonElement;
+  private dropDown: HTMLUListElement;
+  private options: NodeListOf<HTMLLIElement> | null;
+  private announcement: HTMLDivElement;
+  private isDropdownOpen = false;
+  private currentOptionIndex = 0;
 
   constructor(init: InitOptions) {
     super();
+
     if (init.icon) this._icon = init.icon;
+    if (init.labelAsText) this._labelAsText = init.labelAsText;
     this._options = init.options;
     this._label = init.label;
+  
+    this.selectButton = document.createElement("button");
+    this.dropDown = document.createElement("ul");
+    this.options = null;
+    this.announcement = document.createElement("div");
+    this.isDropdownOpen = false;
+    this.currentOptionIndex = 0;
+
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleDocumentInteraction = this.handleDocumentInteraction.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
   }
 
   // Create the element when connected to the DOM
   connectedCallback() {
 
     this.innerHTML = `
-      <label for="select">${this._label}</label>
+      ${this._labelAsText ? "" : `<label for="select">${this._label}</label>`}
       <button
         name="select"
         id="select"
@@ -35,27 +49,33 @@ class CustomSelect extends HTMLElement {
         tabindex="0"
         aria-expanded="false"
       >
-        ${this._options[0].text}
+        ${this._labelAsText ? this._label : this._options[0].text}
         ${this._icon || ""}
       </button>
-      <ul role="listbox" id="select-options" class="${styles.listbox}">
+      <ul role="listbox" id="select-options" class="custom-select-options">
       </ul>
-      <div id="announcement" aria-live="assertive" role="alert" style="opacity:0;"></div>
+      <div id="announcement" class="announcement" aria-live="assertive" role="alert"></div>
     `;
 
-    this.dropDown = this.querySelector("ul");
+    this.dropDown = this.querySelector("ul")!;
     // Add the options to the list
     this.listOptions();
-    this.querySelector("custom-icon")!.classList.add(styles.icon)
+    this.querySelector("custom-icon")?.classList.add(styles.icon)
 
-    this.selectButton = this.querySelector("button");
+    this.selectButton = this.querySelector("button")!;
     this.options = this.querySelectorAll(`[role="option"]`);
-    this.announcement = this.querySelector("#announcement");
+    this.announcement = this.querySelector("#announcement")!;
 
-    this.classList.add(styles.select);
+    this.selectButton?.addEventListener("click", this.handleDocumentInteraction)
+    this.dropDown?.addEventListener("click", this.handleDocumentInteraction)
+    this.dropDown.addEventListener("keydown", this.handleKeyPress)
+    this.addEventListener("focusout", () => {
+      setTimeout(() => {
+        if (this.isDropdownOpen) this.toggleDropdown()
+      }, 100)
+    });
 
-    document.addEventListener("click", this.handleDocumentInteraction)
-    this.addEventListener("keydown", this.handleKeyPress)
+    this.classList.add("custom-select");
 
   }
 
@@ -75,20 +95,20 @@ class CustomSelect extends HTMLElement {
         <li role="option" value="${this._options[i].value}">
           ${this._options[i].text}
         </li>
-      `
+      `;
     }
   }
 
   // Toggle the dropdown select list
   toggleDropdown = () => {
-    this.dropDown!.classList.toggle(styles.active);
+    this.dropDown!.classList.toggle(styles.active, !this.isDropdownOpen);
     this.isDropdownOpen = !this.isDropdownOpen;
     this.selectButton!.setAttribute('aria-expanded', this.isDropdownOpen.toString()); // update the aria-expanded state
 
     if (this.isDropdownOpen) {
       this.focusCurrentOption();
     } else {
-      this.selectButton!.focus(); // focus the button when the dropdown is closed just like the select element
+      this.blur();
     }
   }
 
@@ -137,12 +157,7 @@ class CustomSelect extends HTMLElement {
 
   // Dismiss dropdown or selct option
   handleDocumentInteraction = (event: MouseEvent) => {
-    const isClickInsideButton = this.selectButton!.contains(event.target as unknown as Node);
-    const isClickInsideDropdown = this.dropDown!.contains(event.target as unknown as Node);
-  
-    if (isClickInsideButton || (!isClickInsideDropdown && this.isDropdownOpen)){
-      this.toggleDropdown();
-    }
+    this.toggleDropdown();
 
     // Check if the click is on an option
     const clickedOption = (event.target! as HTMLElement).closest(`[role="option"]`) as HTMLLIElement;
@@ -182,7 +197,7 @@ class CustomSelect extends HTMLElement {
   selectOptionByElement = (optionElement: HTMLLIElement) => {
     const optionValue = optionElement.textContent;
   
-    this.selectButton!.textContent = optionValue;
+    if (!this._labelAsText) this.selectButton!.innerHTML = `${optionValue} ${this._icon}`;
     this.selectButton!.value = `${optionElement.value}`;
     this.options!.forEach(option => {
       option.classList.remove(styles.active);
@@ -209,8 +224,11 @@ class CustomSelect extends HTMLElement {
 
   // Emit the change event so parent can process it
   emitChange = () => {
-    const changeEvent = new Event("change", {
+    const changeEvent = new CustomEvent("change", {
       bubbles: true,
+      detail: {
+        type: this._label
+      }
     });
 
     this.selectButton!.dispatchEvent(changeEvent);
@@ -220,6 +238,7 @@ class CustomSelect extends HTMLElement {
 
 interface InitOptions {
   icon?: string,
+  labelAsText?: boolean,
   options: {
     value: string,
     text: string,
