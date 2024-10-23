@@ -12,11 +12,11 @@
 
   /* Individual table cells */
   & th, & td {
-    padding: 0.5rem;
+    padding: 0.5rem 1rem;
     text-align: left;
     border: none;
     flex: 0 0 8rem;
-    height: fit-content;
+    height: 4rem;
     display: flex;
     align-items: center;
 
@@ -97,14 +97,13 @@
     display: inline-flex;
     align-items: center;
     gap: 1rem;
-    padding-left: 0.25rem;
   }
 }
 
 /* The collapse button */
 .collapse-btn {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 100%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -124,12 +123,12 @@
 /* The dropdown rows */
 .extra {
   transition: height 0.5s ease;
-  height: 3rem;
+  height: 4rem;
   display: inline-flex;
   width: 100%;
   margin-inline: auto;
   justify-content: space-between;
-  padding-inline: .5rem 0;
+  padding-inline: .75rem 0;
 
   & * {
     opacity: 1;
@@ -172,6 +171,7 @@
     /* Set all columns to same width on large screens */
     & th, & td {
       flex: 1 1 100% !important;
+      height: 3rem;
     }
 
     & tr>* {
