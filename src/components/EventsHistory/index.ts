@@ -76,27 +76,6 @@ class EventsHistory extends HTMLElement {
     // Render the table
     this.renderTable();
 
-    // Listen for the button click to open the row dropdown
-    Array.from(this.body.getElementsByClassName(styles["collapse-btn"])).forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.getElementById(`extra-${btn.id[btn.id.length - 1]}`)!.classList.toggle(styles.hidden);
-      })
-    })
-
-    // Listen for clicks on the rows to open the modal dialog
-    Array.from(this.body.getElementsByTagName("tr")).forEach(row => {
-      row.addEventListener("click", (event) => {
-        // If the collapse button is clicked, do not open the modal
-        if (
-          (event.target! as HTMLElement).classList.contains(styles["collapse-btn"]) ||
-          (event.target! as HTMLElement).localName === "custom-icon"
-        ) return;
-
-        const index = Number(row.id[row.id.length - 1]) + (this.limit * (this.currentPage - 1));
-        this.openModal(this.list[index]);
-      })
-    })
-
     // Create the pagination section
     this.pagination.classList.add(styles.pagination);
     this.pagination.innerHTML = `
@@ -229,6 +208,27 @@ class EventsHistory extends HTMLElement {
         </tr>
       `;
     }
+
+    // Listen for the button click to open the row dropdown
+    Array.from(this.body!.getElementsByClassName(styles["collapse-btn"])).forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.getElementById(`extra-${btn.id[btn.id.length - 1]}`)!.classList.toggle(styles.hidden);
+      })
+    })
+
+    // Listen for clicks on the rows to open the modal dialog
+    Array.from(this.body!.getElementsByTagName("tr")).forEach(row => {
+      row.addEventListener("click", (event) => {
+        // If the collapse button is clicked, do not open the modal
+        if (
+          (event.target! as HTMLElement).classList.contains(styles["collapse-btn"]) ||
+          (event.target! as HTMLElement).localName === "custom-icon"
+        ) return;
+
+        const index = Number(row.id[row.id.length - 1]) + (this.limit * (this.currentPage - 1));
+        this.openModal(this.list[index]);
+      })
+    })
 
     this.pagination.querySelectorAll(`span.${styles["page-number"]}`).forEach(number => {
       number.classList.toggle(styles.active, Number(number.id.slice(5)) === this.currentPage);
