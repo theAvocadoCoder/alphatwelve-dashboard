@@ -21,7 +21,7 @@ setTimeout(() => {
   
   // On page load, append the correct page to the main content element
   content = app!.querySelector("#content")!;
-  content!.append(
+  content?.append(
     window.location.pathname.substring(1) === "" ?
     Dashboard() :
     InProgress()
