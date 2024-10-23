@@ -94,7 +94,7 @@
 
   /* Cells that don't get hidden */
   & td:first-child:not(.extra *) {
-    width: 15rem;
+    width: 10rem;
     display: inline;
     align-items: center;
     gap: 1rem;
