@@ -4,6 +4,14 @@
   padding: 1rem;
   text-align: left;
   border-radius: 0.125rem;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 0.75rem -0.25rem rgba(0, 0, 0, 0.2);
+  }
 
   /* Stat label and value */
   &>* {
