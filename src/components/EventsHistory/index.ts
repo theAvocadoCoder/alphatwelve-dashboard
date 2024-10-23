@@ -281,25 +281,27 @@ class EventsHistory extends HTMLElement {
     for (let i = 0; i < this.pages; i++) {
       // When more than 5 pages, truncate the numbers at depth of 2
       if (this.pages > 5 && i === 2){  
+        const isCurrentPage = this.currentPage > 2 && this.currentPage < this.pages - 1;
+
         container!.innerHTML += `
-          <span>...</span>
-        `;
-        if (this.currentPage > 2 && this.currentPage < this.pages - 1) {
-          container!.innerHTML += `
-            <span id="page-${this.currentPage}" class="${styles["page-number"]} ${
+          ${isCurrentPage ? "<span>...</span>" : "<span>&nbsp;&nbsp;&nbsp;</span>"}
+          ${isCurrentPage ? `<span id="page-${this.currentPage}" class="${styles["page-number"]} ${
               styles.active
-            }">${this.currentPage}</span><span>...</span>
-          `;
-        }
+            }">${this.currentPage}</span>` : "<span>&nbsp;...&nbsp;</span>"}
+          ${isCurrentPage ? "<span>...</span>" : "<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>"}
+        `;
+
         i = this.pages - 3;
         continue;
+
+      } else {
+        // Display current page in the midst of truncation
+        container!.innerHTML += `
+          <span id="page-${i+1}" class="${styles["page-number"]} ${
+            this.currentPage === i + 1 ? styles.active : ""
+          }">${i+1}</span>
+        `;
       }
-      // Display current page in the midst of truncation
-      container!.innerHTML += `
-        <span id="page-${i+1}" class="${styles["page-number"]} ${
-          this.currentPage === i + 1 ? styles.active : ""
-        }">${i+1}</span>
-      `;
     }
 
     // Add click event listeners to change pages
