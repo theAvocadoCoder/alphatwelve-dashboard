@@ -93,14 +93,24 @@
   }
 
   /* Cells that don't get hidden */
-  & td:first-child:not(.extra *) {
+  & td:first-child:not(.extra *, .no-results *) {
     width: 10rem;
+    height: fit-content;
     display: inline;
-    align-items: center;
+    flex: 1 0 10rem;
     gap: 1rem;
     overflow-x: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
+  }
+
+  & .no-results {
+    height: 5rem;
+
+    td {
+      width: 10rem !important;
+      text-wrap: pretty;
+    }
   }
 }
 

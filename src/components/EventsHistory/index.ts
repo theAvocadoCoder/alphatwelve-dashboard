@@ -180,6 +180,22 @@ class EventsHistory extends HTMLElement {
   }
 
   renderTable = () => {
+
+    // If search results don't yield anything, display helpful message
+    if (this.listLength === 0) {
+      this.body!.innerHTML = "";
+      const noResultsRow = document.createElement("tr");
+      const noResultsCell = document.createElement("td");
+      const columnCount = this.querySelector("thead tr")?.children.length;
+      noResultsCell.setAttribute("colspan", `${columnCount}`); // Spans all columns
+      noResultsCell.textContent = "You have no events that match this search. Try adjusting your filters.";
+      noResultsRow.appendChild(noResultsCell);
+      noResultsRow.classList.add(styles["no-results"]);
+      this.body!.appendChild(noResultsRow);
+
+      return;
+    }
+
     // Pagination: render table by page
     const list = this.list.slice(
       this.limit * (this.currentPage - 1),
