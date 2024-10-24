@@ -154,7 +154,7 @@ class EventsHistory extends HTMLElement {
             <span class="sr-only">More options</span>
             ${moreOptions}
           </button>
-          <button>
+          <button id="download-btn">
             ${download}
             <span>Export</span>
           </button>
@@ -231,6 +231,9 @@ class EventsHistory extends HTMLElement {
     sortContainer!.addEventListener("change", (event) => {
       this.sortTable((event.target as HTMLSelectElement).value);
     });
+
+    // Add click event listener for the downlaod button
+    this.query.querySelector("#download-btn")!.addEventListener("click", this.downloadTable)
 
     // Create the popup modal
     this.modal.root.innerHTML = `
@@ -553,6 +556,31 @@ class EventsHistory extends HTMLElement {
     this.modal.description!.innerHTML = ``;
     this.modal.root.querySelector("#attendance")!.innerHTML = ``;
     this.modal.root.querySelector(`.${styles.avatars}`)!.innerHTML = ``;
+  }
+
+  // Download the table
+  downloadTable = () => {
+    // Extract the keys
+    const keys = Object.keys(this.list[0]) as (keyof typeof this.list[number])[];
+    const csvRows = ["Event Name,Date,Speaker,Status"];
+
+    // Add the body
+    this.list.forEach(obj => {
+      const values = keys.map(key => JSON.stringify(obj[key], null, 2));
+      csvRows.push(values.join(","));
+    });
+
+    // Convert to a blob
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: "text/csv" });
+
+    // Download
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "events-history";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }
 
