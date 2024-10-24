@@ -162,17 +162,21 @@ class EventsHistory extends HTMLElement {
       </div>
     `;
 
+    // The search bar
     this.searchBar = this.query.querySelector("#search") as HTMLInputElement;
 
+    // Listen to changes as user types or when they press enter
     this.searchBar!.addEventListener("keyup", (event: KeyboardEvent) => {
       if (event.key === "Enter") this.searchTable();
     });
     this.searchBar!.addEventListener("keyup", debounce(this.searchTable, 500));
 
+    // The filter containers
     const filterContainers = this.query.querySelectorAll(
       `.${styles["filter-container"]} div:not(.${styles["search-container"]})`
     ) as NodeListOf<HTMLDivElement>;
 
+    // Add custom select elements for filters
     filterContainers.forEach(container => {
       container.appendChild(new CustomSelect({
         label: container.id.replace(
@@ -208,8 +212,10 @@ class EventsHistory extends HTMLElement {
       });
     });
 
+    // The sort container
     const sortContainer = this.query.querySelector(`.${styles.sort}`);
 
+    // Add custom select element for sorting
     sortContainer!.appendChild(new CustomSelect({
       label: "Sort:",
       icon: chevronDown,
@@ -221,6 +227,7 @@ class EventsHistory extends HTMLElement {
       ]
     }));
 
+    // Listen for the filter's change event and handle
     sortContainer!.addEventListener("change", (event) => {
       this.sortTable((event.target as HTMLSelectElement).value);
     });
@@ -278,6 +285,7 @@ class EventsHistory extends HTMLElement {
     this.innerHTML = "";
   }
 
+  // Render the table
   renderTable = () => {
 
     // If search results don't yield anything, display helpful message
@@ -351,6 +359,7 @@ class EventsHistory extends HTMLElement {
     })
   }
 
+  // Rerender the table after query operations
   rerenderTable = () => {
     this.listLength = this.list.length;
     this.query.querySelector("#display-text")!.textContent = "" + this.listLength;
@@ -361,6 +370,7 @@ class EventsHistory extends HTMLElement {
     this.renderTable();
   }
 
+  // Filter the table using one property
   filterTable = (property: keyof typeof this.list[number], value: string) => {
     this.list = [...history];
     this.list = this.list.filter(item => item[property] == value);
@@ -368,6 +378,7 @@ class EventsHistory extends HTMLElement {
     this.rerenderTable();
   }
 
+  // Sort the table with limited patterns
   sortTable = (pattern: string) => {
     this.list = [...history];
 
@@ -394,7 +405,9 @@ class EventsHistory extends HTMLElement {
     this.rerenderTable();
   }
 
+  // Filter the table to match user's search string
   searchTable = () => {
+    // Trimming and lowering case helps bypass String.includes() strict comparison
     const query = this.searchBar.value.toLocaleLowerCase().trim();
     
     this.list = [...history];
@@ -410,6 +423,7 @@ class EventsHistory extends HTMLElement {
     this.rerenderTable();
   }
 
+  // Open the event details modal
   openModal = (event: typeof this.list[number]) => {
     this.clearModal();
 
