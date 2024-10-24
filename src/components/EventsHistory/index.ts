@@ -8,17 +8,29 @@ import avatar3 from "@assets/avatar3.png";
 import { createIcon } from "@components/CustomIcon";
 import CustomSelect from "./CustomSelect";
 
-const [chevronRightAlt, chevronLeft, chevronRight, chevronDown] = [
+const [chevronRightAlt, chevronLeft, chevronRight, chevronDown, search, moreOptions, download] = [
   createIcon("chevronRightAlt").outerHTML,
   createIcon("chevronLeft").outerHTML,
   createIcon("chevronRight").outerHTML,
   createIcon("chevronDown").outerHTML,
+  createIcon("search").outerHTML,
+  createIcon("moreOptions").outerHTML,
+  createIcon("download").outerHTML,
 ];
 
 class EventsHistory extends HTMLElement {
   constructor() {
     super();
   }
+
+  list: typeof history[number][] = [...history];
+  currentPage = 1;
+  limit = 10;
+  listLength = this.list.length;
+  // If list length is a multiple of limit, no need to force rounding up
+  pages = this.listLength % this.limit > 0 ?
+    Math.ceil(this.listLength / this.limit) :
+    this.listLength /this.limit;
 
   // Table data
   body: HTMLTableSectionElement | null = null;
@@ -27,12 +39,9 @@ class EventsHistory extends HTMLElement {
   pagination: HTMLDivElement = document.createElement("div");
   pageNavBtns: NodeListOf<HTMLSpanElement> | null = null;
 
-  list: typeof history[number][] = [...history];
-  currentPage = 1;
-  limit = 10;
-  listLength = this.list.length;
-  // If list length is a multiple of limit, no need to force rounding up
-  pages = this.listLength % this.limit > 0 ? Math.ceil(this.listLength / this.limit) : this.listLength /this.limit;
+  // Query control elements
+  query: HTMLDivElement = document.createElement("div");
+  searchBar: HTMLInputElement = document.createElement("input");
 
   // Modal data
   modal: {
@@ -92,7 +101,7 @@ class EventsHistory extends HTMLElement {
       </div>
     `;
 
-    // Add the custom select element
+    // Add the pagination select element
     this.pagination.querySelector(`.${styles.limit}`)!.appendChild(new CustomSelect({
       label: "Show:",
       icon: chevronDown,
@@ -122,9 +131,98 @@ class EventsHistory extends HTMLElement {
       // Set new limit based on user selection
       this.limit = Number((event.target as HTMLSelectElement).value);
 
-      this.updatePages();
-      this.togglePageNavDisabled();
-      this.renderTable();
+      this.rerenderTable();
+    });
+
+    // Create the query section
+    this.query.classList.add(styles.query);
+    this.query.innerHTML = `
+      <div class="${styles["filter-container"]}">
+        <div class="${styles["search-container"]}">
+          <input id="search" class="${styles.search}" aria-label="Search" placeholder="Search..." />
+          ${search}
+        </div>
+        <div id="date" data-value="date" class="${styles.date} ${styles.filter}"></div>
+        <div id="status" data-value="status" class="${styles.status} ${styles.filter}"></div>
+        <div id="name" data-value="eventName" class="${styles.name} ${styles.filter}"></div>
+        <span>Displaying <span id="display-text">${this.listLength}</span> results</span>
+      </div>
+      <div class="${styles["sort-container"]}">
+        <div class="${styles.sort}"></div>
+        <div class="${styles["more-options"]}">
+          <button>
+            <span class="sr-only">More options</span>
+            ${moreOptions}
+          </button>
+          <button>
+            ${download}
+            <span>Export</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    this.searchBar = this.query.querySelector("#search") as HTMLInputElement;
+
+    this.searchBar!.addEventListener("keyup", (event: KeyboardEvent) => {
+      if (event.key === "Enter") this.searchTable();
+    });
+    this.searchBar!.addEventListener("keyup", debounce(this.searchTable, 500));
+
+    const filterContainers = this.query.querySelectorAll(
+      `.${styles["filter-container"]} div:not(.${styles["search-container"]})`
+    ) as NodeListOf<HTMLDivElement>;
+
+    filterContainers.forEach(container => {
+      container.appendChild(new CustomSelect({
+        label: container.id.replace(
+          /[a-z]/g, 
+          (c: string, offset?: number) => offset === 0 ? c.toUpperCase() : c
+        ),
+        labelAsText: true,
+        icon: chevronDown,
+        options: Array.from(
+          new Set(
+            this.list.map(item => (JSON.stringify({
+              value: item[container.getAttribute("data-value") as keyof typeof this.list[number]],
+              text: item[container.getAttribute("data-value") as keyof typeof this.list[number]],
+            })))
+          )
+        )
+        .map(item => JSON.parse(item))
+        .sort((a: any, b: any) => {
+          switch (container.id) {
+            case "date":
+              return new Date(a.value).getTime() - new Date(b.value).getTime();
+            default:
+              return a.value.localeCompare(b.value, undefined, { sensitivity: 'base' });
+          }
+        }),
+      }));
+
+      container.addEventListener("change", (event) => {
+        this.filterTable(
+          container.getAttribute("data-value") as keyof typeof this.list[number], 
+          (event.target as HTMLSelectElement).value
+        );
+      });
+    });
+
+    const sortContainer = this.query.querySelector(`.${styles.sort}`);
+
+    sortContainer!.appendChild(new CustomSelect({
+      label: "Sort:",
+      icon: chevronDown,
+      options: [
+        {value: "most-recent", text: "Most Recent"},
+        {value: "oldest", text: "Oldest"},
+        {value: "name", text: "Name"},
+        {value: "name-reversed", text: "Name Reversed"}
+      ]
+    }));
+
+    sortContainer!.addEventListener("change", (event) => {
+      this.sortTable((event.target as HTMLSelectElement).value);
     });
 
     // Create the popup modal
@@ -154,7 +252,8 @@ class EventsHistory extends HTMLElement {
     `;
 
     // Close the modal on button click
-    Array.from(this.modal.root.querySelectorAll("iconify-icon, button")!).forEach(btn => btn.addEventListener("click", () => {
+    Array.from(this.modal.root.querySelectorAll("iconify-icon, button")!)
+    .forEach(btn => btn.addEventListener("click", () => {
       this.modal.root.close();
     }));
 
@@ -171,7 +270,7 @@ class EventsHistory extends HTMLElement {
 
     this.modal.root.classList.add(styles.modal);
 
-    this.append(this.modal.root, table, this.pagination);
+    this.append(this.modal.root, this.query, table, this.pagination);
   }
 
   // Tear down the element when it is removed from the DOM
@@ -250,6 +349,65 @@ class EventsHistory extends HTMLElement {
     this.pagination.querySelectorAll(`span.${styles["page-number"]}`).forEach(number => {
       number.classList.toggle(styles.active, Number(number.id.slice(5)) === this.currentPage);
     })
+  }
+
+  rerenderTable = () => {
+    this.listLength = this.list.length;
+    this.query.querySelector("#display-text")!.textContent = "" + this.listLength;
+    this.currentPage = 1;
+
+    this.updatePages();
+    this.togglePageNavDisabled();
+    this.renderTable();
+  }
+
+  filterTable = (property: keyof typeof this.list[number], value: string) => {
+    this.list = [...history];
+    this.list = this.list.filter(item => item[property] == value);
+
+    this.rerenderTable();
+  }
+
+  sortTable = (pattern: string) => {
+    this.list = [...history];
+
+    this.list.sort((a: typeof this.list[number], b: typeof this.list[number]) => {
+      switch(pattern) {
+        case "most-recent":
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+          break;
+        case "oldest":
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+          break;
+        case "name":
+          return a.eventName.localeCompare(b.eventName, undefined, { sensitivity: 'base' });
+          break;
+        case "name-reversed":
+          return b.eventName.localeCompare(a.eventName, undefined, { sensitivity: 'base' });
+          break;
+        default:
+          return 0;
+          break;
+      }
+    })
+    
+    this.rerenderTable();
+  }
+
+  searchTable = () => {
+    const query = this.searchBar.value.toLocaleLowerCase().trim();
+    
+    this.list = [...history];
+
+    if (query === "") return this.rerenderTable();
+
+    this.list = this.list.filter(item => (
+      item.date.toLocaleLowerCase().trim().includes(query) ||
+      item.eventName.toLocaleLowerCase().trim().includes(query) ||
+      item.speaker.toLocaleLowerCase().trim().includes(query)
+    ));
+
+    this.rerenderTable();
   }
 
   openModal = (event: typeof this.list[number]) => {
@@ -337,8 +495,10 @@ class EventsHistory extends HTMLElement {
 
     if (this.currentPage === 1) {
       this.pageNavBtns!.forEach(_btn => _btn.classList.toggle(styles.disabled, _btn.classList.contains(styles["page-left"])));
-    } else if (this.currentPage === this.pages) {
+    } else if (this.currentPage === this.pages && this.pages > 0) {
       this.pageNavBtns!.forEach(_btn => _btn.classList.toggle(styles.disabled, _btn.classList.contains(styles["page-right"])));
+    } else if (this.currentPage === 0) {
+      this.pageNavBtns!.forEach(_btn => _btn.classList.toggle(styles.disabled, true));
     } else { 
       this.pageNavBtns!.forEach(_btn => _btn.classList.toggle(styles.disabled, false));
     }
@@ -379,6 +539,18 @@ class EventsHistory extends HTMLElement {
     this.modal.description!.innerHTML = ``;
     this.modal.root.querySelector("#attendance")!.innerHTML = ``;
     this.modal.root.querySelector(`.${styles.avatars}`)!.innerHTML = ``;
+  }
+}
+
+function debounce<T extends (...args: any[]) => any>(func: T, delay: number): (this: any, ...args: Parameters<T>) => void {
+  let timeoutId: NodeJS.Timeout;
+  
+  return function(this: any, ...args: Parameters<T>) {
+    if (timeoutId) clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
   }
 }
 

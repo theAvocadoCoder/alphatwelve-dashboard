@@ -1,6 +1,9 @@
 
-:global(.custom-select) * {
-  &::-webkit-scrollbar { width: .25rem !important; }
+:global(.custom-select) *, .page-controls {
+  &::-webkit-scrollbar {
+    width: .25rem !important;
+    height: .25rem !important;
+  }
   &::-webkit-scrollbar-track, & *::-webkit-scrollbar-track { background-color: transparent }
   &::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb {
     background-color: #b5b0c0;
@@ -19,18 +22,21 @@
 .pagination {
   width: 100%;
   display: flex;
+  gap: 1rem;
   justify-content: space-between;
   align-items: center;
   padding-block: 1rem;
-
 }
 
 /* The container for page navigation buttons and page numbers */
 .page-controls {
   display: flex;
-  justify-content: space-evenly;
+  flex: 0 1 70%;
+  justify-content: start;
+  gap: 1rem;
   align-items: center;
-  width: fit-content;
+  width: 20rem;
+  overflow-x: scroll;
 }
 
 /* The page navigation buttons */
@@ -91,7 +97,10 @@
 }
 
 /* The container for the custom select element */
-.limit {display: block;}
+.limit {
+  flex: 0 0 30%;
+  display: block;
+}
 
 /* The custom select element */
 :global(.custom-select) {
@@ -131,7 +140,7 @@
     font-size: 0.875rem;
     text-align: center;
     position: relative;
-    border: 0.0625rem solid var(--color-surface-dim);
+    border: 0.0625rem solid var(--color-table-control-border);
 
     & .icon {
       transform: rotate(0);
@@ -211,3 +220,249 @@
     height: 1.5rem;
   }
 }
+
+/** 
+ *
+ * END PAGINATION STYLES
+ *
+*/
+
+/** 
+ *
+ * START QUERY STYLES
+ *
+*/
+
+/* The query controls above the table */
+.query {
+  padding-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+/* The filter and sort query control containers */
+.filter-container, .sort-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+  width: 100%;
+
+  /* The display text */
+  &> span {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    text-align: start;
+    width: 100%;
+  }
+
+  &> * { flex: 5 0 100% }
+}
+
+.filter, .search { border-radius: 0.125rem }
+
+/* The search container and icon */
+.search-container {
+  position: relative;
+  height: 2.25rem;
+  width: 100%;
+
+  custom-icon {
+    position: absolute;
+    left: .5rem;
+    top: .5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #94A3B8;
+  }
+}
+
+/* The search bar gan gan */
+.search {
+  height: 100%;
+  width: 100%;
+  padding: .5rem;
+  padding-left: 2.25rem;
+  border: 0.0625rem solid var(--color-table-control-border);
+  background-color: var(--color-surface);
+
+  &::placeholder {
+    color: #CBD5E1;
+  }
+}
+
+/* The filter select elements */
+.filter {
+  width: 100%;
+
+  /* Change select elements default styling */
+  :global(.custom-select) {
+    button {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: .25rem;
+      margin: 0;
+    }
+  }
+
+  :global(.custom-select-options) {
+    bottom: 0;
+    top: calc(100% + .5rem);
+    right: 0;
+    left: auto;
+    height: max-content;
+    max-height: 14rem;
+    width: 100%;
+    transform-origin: top left;
+    border: 0.0625rem solid var(--color-surface-dim);
+
+    :global(.dark) & { border: none }
+  }
+}
+
+/* The sort select and more options buttons */
+.sort, .more-options {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* The sort select container */
+.sort {
+
+  /* Change select elements default styling */
+  :global(.custom-select) {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: .5rem;
+
+    button {
+      width: fit-content;
+      margin: 0;
+    }
+  }
+
+  :global(.custom-select-options) {
+    bottom: 0;
+    top: calc(100% + .5rem);
+    right: 0;
+    left: auto;
+    height: max-content;
+    max-height: 15rem;
+    width: 9.75rem !important;
+    transform-origin: top left;
+    border: 0.0625rem solid var(--color-surface-dim);
+
+    :global(.dark) & { border: none }
+  }
+}
+
+/* The more options- and download buttons */
+.more-options {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+
+  button {
+    width: fit-content;
+    padding: .5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-surface);
+    color: var(--color-body-variant);
+    font-size: 0.875rem;
+    text-align: center;
+    border: 0.0625rem solid var(--color-table-control-border);
+
+    :global(.dark) & {
+      border: none;
+    }
+
+    &:last-child {
+      padding-inline: 1rem;
+    }
+  }
+}
+
+/* Resize the controls to be responsive to various screen widths */
+@media (min-width: 768px) {
+  .filter-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .search-container {
+    flex: 1 1 30%;
+  }
+
+  .filter {
+    flex: 1 1 20%;
+
+    :global(.custom-select-options) {
+      width: 15rem;
+    }
+  }
+
+  .sort-container {
+    flex-direction: row;
+    justify-content: space-between;
+    &> * { flex: 0 0 fit-content }
+  }
+
+  .sort {
+    :global(.custom-select) {
+      justify-content: center;
+      width: fit-content;
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+
+  .filter-container {
+    flex-wrap: no-wrap;
+
+    &> span {
+      flex: 0 0 fit-content;
+    }
+  }
+
+  .search-container {
+    flex: 0 1 12.5rem;
+  }
+
+  .filter {
+    flex: 0 0 fit-content;
+
+    :global(.custom-select) {
+      button {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+@media (min-width: 1280px) {
+  .query {
+    flex-direction: row;
+    gap: 5rem;
+  }
+
+  .sort-container {
+    width: fit-content;
+    justify-content: end;
+  }
+}
+
+/** 
+ *
+ * END QUERY STYLES
+ *
+*/
