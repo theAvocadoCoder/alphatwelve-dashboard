@@ -92,7 +92,7 @@ class CustomSelect extends HTMLElement {
 
     for (let i = 0; i < length; i++) {
       this.dropDown!.innerHTML += `
-        <li role="option" value="${this._options[i].value}">
+        <li role="option" id="${this._options[i].value}">
           ${this._options[i].text}
         </li>
       `;
@@ -198,7 +198,7 @@ class CustomSelect extends HTMLElement {
     const optionValue = optionElement.textContent;
   
     if (!this._labelAsText) this.selectButton!.innerHTML = `${optionValue} ${this._icon}`;
-    this.selectButton!.value = `${optionElement.value}`;
+    this.selectButton!.value = `${optionElement.id}`;
     this.options!.forEach(option => {
       option.classList.remove(styles.active);
       option.setAttribute('aria-selected', 'false');
