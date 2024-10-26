@@ -89,13 +89,15 @@ class EventsHistory extends HTMLElement {
     this.pagination.classList.add(styles.pagination);
     this.pagination.innerHTML = `
       <div class="${styles["page-controls"]}">
-        <span class="${styles["page-left"]} ${this.currentPage === 1 ? styles.disabled : ""}">
+        <button class="${styles["page-left"]} ${this.currentPage === 1 ? styles.disabled : ""}">
+          <span class="sr-only">Previous</span>
           ${chevronLeft}
-        </span>
+        </button>
         <div class="${styles.pages}"></div>
-        <span class="${styles["page-right"]} ${this.currentPage === this.pages ? styles.disabled : ""}">
+        <button class="${styles["page-right"]} ${this.currentPage === this.pages ? styles.disabled : ""}">
+          <span class="sr-only">Next</span>
           ${chevronRight}
-        </span>
+        </button>
       </div>
       <div class="${styles.limit}">
       </div>
@@ -117,7 +119,7 @@ class EventsHistory extends HTMLElement {
     this.renderPageNumbers();
 
     // The previous and next page navigation buttons
-    this.pageNavBtns = this.pagination.querySelectorAll(`.${styles["page-controls"]}> span`);
+    this.pageNavBtns = this.pagination.querySelectorAll(`.${styles["page-controls"]}> button`);
 
     // Listen for button click
     this.pageNavBtns.forEach(btn => btn.addEventListener("click", () => this.navigatePageByOne(btn)))
@@ -126,7 +128,7 @@ class EventsHistory extends HTMLElement {
     this.pagination.querySelector(`option[value="${this.limit}"]`)?.setAttribute("selected", "");
 
     // Listen for change in select element
-    this.pagination.querySelector(`.${styles.limit}`)!.addEventListener("change", (event) => {
+    this.pagination.querySelector(`.${styles.limit}`)!.addEventListener("opt-change", (event) => {
       if ((event as CustomEvent).detail.type !== "Show:") return;
       // Set new limit based on user selection
       this.limit = Number((event.target as HTMLSelectElement).value);
@@ -187,9 +189,9 @@ class EventsHistory extends HTMLElement {
         icon: chevronDown,
         options: Array.from(
           new Set(
-            this.list.map(item => (JSON.stringify({
-              value: item[container.getAttribute("data-value") as keyof typeof this.list[number]],
-              text: item[container.getAttribute("data-value") as keyof typeof this.list[number]],
+            history.map(item => (JSON.stringify({
+              value: item[container.getAttribute("data-value") as keyof typeof history[number]],
+              text: item[container.getAttribute("data-value") as keyof typeof history[number]],
             })))
           )
         )
@@ -204,7 +206,7 @@ class EventsHistory extends HTMLElement {
         }),
       }));
 
-      container.addEventListener("change", (event) => {
+      container.addEventListener("opt-change", (event) => {
         this.filterTable(
           container.getAttribute("data-value") as keyof typeof this.list[number], 
           (event.target as HTMLSelectElement).value
@@ -228,7 +230,7 @@ class EventsHistory extends HTMLElement {
     }));
 
     // Listen for the filter's change event and handle
-    sortContainer!.addEventListener("change", (event) => {
+    sortContainer!.addEventListener("opt-change", (event) => {
       this.sortTable((event.target as HTMLSelectElement).value);
     });
 

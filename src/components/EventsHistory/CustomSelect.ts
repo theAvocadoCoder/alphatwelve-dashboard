@@ -24,14 +24,14 @@ class CustomSelect extends HTMLElement {
   
     this.selectButton = document.createElement("button");
     this.dropDown = document.createElement("ul");
-    this.options = null;
+    this.options = document.createDocumentFragment().childNodes as NodeListOf<HTMLLIElement>;
     this.announcement = document.createElement("div");
     this.isDropdownOpen = false;
     this.currentOptionIndex = 0;
 
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleDocumentInteraction = this.handleDocumentInteraction.bind(this);
     this.toggleDropdown = this.toggleDropdown.bind(this);
+    this.selectOptionByElement = this.selectOptionByElement.bind(this);
   }
 
   // Create the element when connected to the DOM
@@ -41,7 +41,7 @@ class CustomSelect extends HTMLElement {
       ${this._labelAsText ? "" : `<label for="select">${this._label}</label>`}
       <button
         name="select"
-        id="select"
+        id="select-${this._label}"
         role="combobox"
         value="${this._options[this.currentOptionIndex].value}"
         aria-controls="select-options"
@@ -52,7 +52,12 @@ class CustomSelect extends HTMLElement {
         ${this._labelAsText ? this._label : this._options[0].text}
         ${this._icon || ""}
       </button>
-      <ul role="listbox" id="select-options" class="custom-select-options">
+      <ul
+        role="listbox"
+        id="select-options"
+        aria-labelledby="select-${this._label}"
+        class="custom-select-options"
+      >
       </ul>
       <div id="announcement" class="announcement" aria-live="assertive" role="alert"></div>
     `;
@@ -66,13 +71,20 @@ class CustomSelect extends HTMLElement {
     this.options = this.querySelectorAll(`[role="option"]`);
     this.announcement = this.querySelector("#announcement")!;
 
-    this.selectButton?.addEventListener("click", this.handleDocumentInteraction)
-    this.dropDown?.addEventListener("click", this.handleDocumentInteraction)
-    this.dropDown.addEventListener("keydown", this.handleKeyPress)
+    this.selectButton.addEventListener("click", this.toggleDropdown)
+    this.dropDown.addEventListener(
+      "click", 
+      (event) => this.selectOptionByElement(event.target as HTMLLIElement)
+    )
+    
+    this.addEventListener("keydown", this.handleKeyPress)
     this.addEventListener("focusout", () => {
       setTimeout(() => {
-        if (this.isDropdownOpen) this.toggleDropdown()
-      }, 100)
+        if (
+          this.isDropdownOpen && 
+          !this.contains(document.activeElement)
+        ) this.toggleDropdown();
+      }, 200)
     });
 
     this.classList.add("custom-select");
@@ -83,6 +95,7 @@ class CustomSelect extends HTMLElement {
   disconnectedCallback() {
     this.innerHTML = "";
     this.isDropdownOpen = false;
+    this.currentOptionIndex = 0;
   }
 
   // Add options to the list
@@ -106,30 +119,32 @@ class CustomSelect extends HTMLElement {
     this.selectButton!.setAttribute('aria-expanded', this.isDropdownOpen.toString()); // update the aria-expanded state
 
     if (this.isDropdownOpen) {
+      this.dropDown.focus();
       this.focusCurrentOption();
-    } else {
-      this.blur();
+      this.dropDown.style.visibility = "visible";
+    }
+    else {
+      this.dropDown.style.visibility = "hidden";
+      this.dropDown.removeAttribute("tabindex");
+      this.focus();
     }
   }
 
   // Apply styles to currently highlighted option
   focusCurrentOption = () => {
     const currentOption = this.options![this.currentOptionIndex];
-  
-    currentOption!.classList.add(styles.current);
-    currentOption!.focus();
-  
+    
     this.options!.forEach((option) => {
-      if (option !== currentOption) {
-        option.classList.remove(styles.current);
-      }
+      option.classList.toggle(styles.current, option === currentOption);
     });
+    currentOption.focus();
   }
 
   // Handle keyboard interaction
   handleKeyPress = (event: KeyboardEvent) => {
-    event.preventDefault();
     const { key } = event;
+    // Don't prevent default behaviour of function keys and Tab
+    if (key.substring(0,1) !== "F" && key !== "Tab") event.preventDefault();
     const openKeys = ['ArrowDown', 'ArrowUp', 'Enter', ' '];
  
    if (!this.isDropdownOpen && openKeys.includes(key)) {
@@ -152,17 +167,6 @@ class CustomSelect extends HTMLElement {
         default:
           break;
       }
-    }
-  }
-
-  // Dismiss dropdown or selct option
-  handleDocumentInteraction = (event: MouseEvent) => {
-    this.toggleDropdown();
-
-    // Check if the click is on an option
-    const clickedOption = (event.target! as HTMLElement).closest(`[role="option"]`) as HTMLLIElement;
-    if (clickedOption) {
-      this.selectOptionByElement(clickedOption);
     }
   }
 
@@ -190,7 +194,6 @@ class CustomSelect extends HTMLElement {
   selectCurrentOption = () => {
     const selectedOption = this.options![this.currentOptionIndex];
     this.selectOptionByElement(selectedOption);
-    this.emitChange();
   }
 
   // Select specified element - for mouse event
@@ -224,7 +227,7 @@ class CustomSelect extends HTMLElement {
 
   // Emit the change event so parent can process it
   emitChange = () => {
-    const changeEvent = new CustomEvent("change", {
+    const changeEvent = new CustomEvent("opt-change", {
       bubbles: true,
       detail: {
         type: this._label

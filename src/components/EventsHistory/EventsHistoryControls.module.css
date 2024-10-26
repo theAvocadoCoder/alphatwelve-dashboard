@@ -187,7 +187,7 @@
     opacity: 1;
     transform: scale(1,1);
     box-shadow: 0 0 .75rem -0.25rem rgba(0, 0, 0, 0.2);
-    pointer-events: auto;
+    pointer-events: all;
 
     :global(.dark) & { box-shadow: 0 0 1rem .0625rem rgba(0, 0, 0, 0.3); }
   }
@@ -422,6 +422,11 @@
       justify-content: center;
       width: fit-content;
     }
+
+    :global(.custom-select-options) {
+      left: 0;
+      right: auto;
+    }
   }
 }
 
@@ -459,6 +464,13 @@
   .sort-container {
     width: fit-content;
     justify-content: end;
+  }
+
+  .sort {
+    :global(.custom-select-options) {
+      right: 0;
+      left: auto;
+    }
   }
 }
 
