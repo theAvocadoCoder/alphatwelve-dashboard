@@ -3,7 +3,6 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/alphatwelve-dashboard/",
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
